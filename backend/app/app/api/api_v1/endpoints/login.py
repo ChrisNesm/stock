@@ -38,8 +38,7 @@ def login_access_token(
         )
     return {
         "access_token": token,
-        "token_type": "bearer",
-        "lang":user.lang or 'ENG'
+        "token_type": "bearer"
     }
 
 

@@ -2,10 +2,14 @@ from typing import Any
 
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy_searchable import make_searchable
+from sqlalchemy import Boolean, Column, Integer, Date
 
 @as_declarative()
 class Base:
-    id: Any
+    id = Column(Integer, primary_key=True, index=True)
+    is_active = Column(Boolean(), default=True)
+    created_at = Column(Date, index=True)
+    updated_at = Column(Date, index=True)
     __name__: str
     # Generate __tablename__ automatically
     @declared_attr
