@@ -5,13 +5,13 @@ from pydantic import BaseModel, EmailStr
 
 # Shared properties
 class UserBase(BaseModel):
+    full_name: Optional[str] = None
     email: Optional[str] = None
     is_active: Optional[bool] = True
     is_superuser: bool = False
     is_owner: bool = False
     is_manager: bool = False
     is_seller: bool = False
-    full_name: Optional[str] = None
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):

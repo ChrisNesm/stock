@@ -50,8 +50,7 @@ export const ListUsers = props => {
 export const CreateUser = (props) => (
     <Create  {...props}>
         <SimpleForm >
-            <TextInput source="nom" />
-            <TextField source="full_name" />
+            <TextInput source="full_name" />
             <TextInput source="email" />
             <TextInput source="password" />
             <BooleanInput source="is_owner" />
@@ -67,8 +66,7 @@ export const EditUser = (props) => (
     <Edit {...props}>
         <SimpleForm>
             <TextField source="id" />
-            <TextInput source="nom" />
-            <TextField source="full_name" />
+            <TextInput source="full_name" />
             <TextInput source="email" />
             <BooleanInput source="is_owner" />
             <BooleanInput source="is_seller" />

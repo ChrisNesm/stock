@@ -1,5 +1,5 @@
 from typing import Any, Dict, Optional, Union
-
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
@@ -13,12 +13,10 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return db.query(User).filter(User.email == email).first()
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
-        db_obj = User(
-            email=obj_in.email,
-            hashed_password=get_password_hash(obj_in.password),
-            full_name=obj_in.full_name,
-            is_superuser=obj_in.is_superuser,
-            )
+        obj_in_data = jsonable_encoder(obj_in)
+        obj_in_data['hashed_password'] = get_password_hash(obj_in_data['password'])
+        del obj_in_data['password']
+        db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
