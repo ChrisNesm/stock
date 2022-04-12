@@ -18,9 +18,10 @@ from app.utils import (
 
 router = APIRouter()
 
-@router.post("/login/access-token", response_model=schemas.token.Token)
+@router.post("/login", response_model=schemas.token.Token)
 def login_access_token(
-    db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
+    form_data: schemas.login.Login,
+    db: Session = Depends(deps.get_db)
 ) -> Any:
     """
     OAuth2 compatible token login, get an access token for future requests
@@ -42,7 +43,7 @@ def login_access_token(
     }
 
 
-@router.post("/login/test-token", response_model=schemas.user.User)
+@router.post("/test-token", response_model=schemas.user.User)
 def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
     """
     Test access token
@@ -69,7 +70,7 @@ def recover_password(email: str, db: Session = Depends(deps.get_db)) -> Any:
     return {"msg": "Password recovery email sent"}
 
 
-@router.post("/reset-password/", response_model=schemas.msg.Msg)
+@router.post("/reset-password", response_model=schemas.msg.Msg)
 def reset_password(
     token: str = Body(...),
     new_password: str = Body(...),

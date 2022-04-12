@@ -12,19 +12,18 @@ from app.utils import send_new_account_email
 
 router = APIRouter()
 
-
-@router.get("/", response_model=List[schemas.User])
+@router.get("/", response_model= schemas.user.UsersList )
 def read_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
+    current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Retrieve users.
     """
     users = crud.user.get_multi(db, skip=skip, limit=limit)
-    return users
+    return schemas.user.UsersList(results= users, total= len(users))
 
 @router.post("/", response_model=schemas.User)
 def create_user(
@@ -49,7 +48,18 @@ def create_user(
         )
     return user
 
-@router.put("/me", response_model=schemas.User)
+@router.get("/me", response_model=schemas.User)
+def read_user_me(
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Get current user.
+    """
+    return current_user
+
+
+@router.patch("/me", response_model=schemas.User)
 def update_user_me(
     *,
     db: Session = Depends(deps.get_db),
@@ -73,7 +83,61 @@ def update_user_me(
     user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
     return user
 
-@router.put("/change-password", response_model=schemas.User)
+
+@router.get("/{user_id}", response_model=schemas.User)
+def read_user_me(
+    user_id: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Get current user.
+    """
+    return crud.user.get(db= db, id= user_id)
+
+
+@router.patch("/{user_id}", response_model=schemas.User)
+def update_user(
+    *,
+    db: Session = Depends(deps.get_db),
+    user_id: int,
+    user_in: schemas.UserUpdate,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Update a user.
+    """
+    user = crud.user.get(db, id=user_id)
+    print(user_in)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user with this username does not exist in the system",
+        )
+    user = crud.user.update(db, db_obj=user, obj_in=user_in)
+    return user
+
+
+@router.delete("/{user_id}", response_model=schemas.User)
+def delete_user(
+    user_id: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Delete a user.
+    """
+    user = crud.user.get(db, id=user_id)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user with this username does not exist in the system",
+        )
+    user = crud.user.delete(db, id= user_id)
+    return user
+
+
+@router.patch("/change-password", response_model=schemas.User)
 def change_my_password(
     *,
     current_password: str = Body(...),
@@ -94,33 +158,3 @@ def change_my_password(
     user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
     return user
 
-@router.get("/me", response_model=schemas.User)
-def read_user_me(
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Get current user.
-    """
-    return current_user
-
-
-@router.put("/{user_id}", response_model=schemas.User)
-def update_user(
-    *,
-    db: Session = Depends(deps.get_db),
-    user_id: int,
-    user_in: schemas.UserUpdate,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
-) -> Any:
-    """
-    Update a user.
-    """
-    user = crud.user.get(db, id=user_id)
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail="The user with this username does not exist in the system",
-        )
-    user = crud.user.update(db, db_obj=user, obj_in=user_in)
-    return user

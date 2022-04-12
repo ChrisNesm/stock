@@ -1,11 +1,25 @@
 import * as React from "react";
-import { Admin, Resource, ListGuesser } from 'react-admin';
-import jsonServerProvider from 'ra-data-json-server';
+import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser } from 'react-admin';
 
-const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
+import theme from './constants/theme' 
+import dataProvider from './providers/dataProvider' 
+import authProvider from './providers/authProvider'
+
+import LoginPage from './pages/Login';
+import LogoutButton from './components/LogoutButton';
+
+import UserCRUD from './pages/User'
+
 const App = () => (
-    <Admin dataProvider={dataProvider} >
-        <Resource name="users" list={ListGuesser} />
+    <Admin 
+    	title="My Custom Admin"
+        loginPage={LoginPage} 
+    	dataProvider={dataProvider} 
+    	authProvider={authProvider}  
+        theme={theme}
+    	>
+
+        <Resource name="users" {...UserCRUD}  />
     </Admin>
 );
 
