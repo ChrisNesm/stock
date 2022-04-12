@@ -20,5 +20,6 @@ class User(Base):
     is_seller = Column(Boolean(), default=False)
 
     owned_stores =relationship('Store')
+    partner_stores = relationship('Store', secondary= 'user__store__partnership', back_populates='business_provider')
     orders = relationship('Order')
-    managed_warehouses =relationship('Warehouse', secondary= user__warehouse, back_populates='managers')
+    managed_warehouses =relationship('Warehouse', secondary= 'user__warehouse', back_populates='managers')

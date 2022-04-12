@@ -12,7 +12,7 @@ user__warehouse = Table('user__warehouse', Base.metadata,
 
 class Warehouse(Base):
     name = Column(String, index=True)
-    address = Column(String, unique=True, index=True, nullable=False)
+    address = Column(String, index=True)
     
     store_id = Column(Integer, ForeignKey('store.id'))
     managers = relationship('User', secondary= user__warehouse, back_populates='managed_warehouses')

@@ -42,12 +42,22 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         if not verify_password(password, user.hashed_password):
             return None
         return user
+    
+    def set_as_manager(self, db: Session, user: User, val: bool = True) -> bool:
+        user.is_manager = val
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
 
     def is_active(self, user: User) -> bool:
         return user.is_active
 
     def is_superuser(self, user: User) -> bool:
         return user.is_superuser
+
+    def is_store_manager(self, user: User) -> bool:
+        return user.is_manager
    
 
 user = CRUDUser(User)

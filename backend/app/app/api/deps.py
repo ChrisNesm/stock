@@ -59,3 +59,10 @@ def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+def get_current_active_store_manager(
+    current_user: models.User = Depends(get_current_user),
+) -> models.User:
+    if not crud.user.is_store_manager(current_user):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user

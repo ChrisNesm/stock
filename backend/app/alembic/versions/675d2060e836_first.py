@@ -43,7 +43,7 @@ def upgrade():
     sa.Column('created_at', sa.Date(), nullable=True),
     sa.Column('updated_at', sa.Date(), nullable=True),
     sa.Column('name', sa.String(), nullable=True),
-    sa.Column('address', sa.String(), nullable=False),
+    sa.Column('address', sa.String(), nullable=True),
     sa.Column('owner', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['owner'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -59,7 +59,7 @@ def upgrade():
     sa.Column('created_at', sa.Date(), nullable=True),
     sa.Column('updated_at', sa.Date(), nullable=True),
     sa.Column('name', sa.String(), nullable=True),
-    sa.Column('address', sa.String(), nullable=False),
+    sa.Column('address', sa.String(), nullable=True),
     sa.Column('store_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['store_id'], ['store.id'], ),
     sa.PrimaryKeyConstraint('id')
