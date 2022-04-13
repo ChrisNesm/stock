@@ -19,21 +19,7 @@ import {Link} from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-
-// const CreateRelatedNiveauBtn = ({ record }) => (
-//     <Button
-//         component={Link}
-//         to={{
-//             pathname: '/niveau/create',
-//             state: { record: { annee: record.id } },
-//         }}
-//     >
-//         Ajouter un niveau
-//     </Button>
-// );
-
-
-export const ListStore = props => {
+export const ListWarehouse = props => {
 /*    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
 */    return (
         <List {...props}>       
@@ -49,16 +35,19 @@ export const ListStore = props => {
     );
 };
 
-export const CreateStore = (props) => (
+export const CreateWarehouse = (props) => (
     <Create  {...props}>
         <SimpleForm >
             <TextInput source="name" />
             <TextInput source="address" />
+            <ReferenceInput source="store_id" reference="stores">
+                <SelectInput optionText='name' />
+            </ReferenceInput>
         </SimpleForm>
     </Create>
 );
 
-export const EditStore = (props) => (
+export const EditWarehouse = (props) => (
     <Edit {...props}>
         <SimpleForm>
             <TextInput source="name" />
@@ -67,7 +56,7 @@ export const EditStore = (props) => (
     </Edit>
 );
 
-export const ShowStore = (props) => {
+export const ShowWarehouse = (props) => {
     const all =  useGetList(
         'warehouses/owned',
         {}, {}, {
@@ -104,9 +93,9 @@ export const ShowStore = (props) => {
 
 
 export default {
-    list: ListStore,
-    edit: EditStore,
-    create: CreateStore,
-    show: ShowStore
+    list: ListWarehouse,
+    edit: EditWarehouse,
+    create: CreateWarehouse,
+    show: ShowWarehouse
 }
 

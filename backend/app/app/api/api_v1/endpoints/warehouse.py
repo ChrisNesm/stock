@@ -148,7 +148,7 @@ def update(
         )
     return crud.warehouse.update(db, db_obj= warehouse, obj_in= warehouse_in)
 
-@router.delete("/{store_id}", response_model=schemas.WarehouseRetrieve)
+@router.delete("/{warehouse_id}", response_model=schemas.WarehouseRetrieve)
 def delete(
     warehouse_id: int,
     db: Session = Depends(deps.get_db),

@@ -12,13 +12,15 @@ export default {
         
 
         const query = {
-            limit: perPage,
-            offset: (page - 1) * perPage,
-            ordering: `${order === 'DESC' ? '-' : '' }${field}`,
+            // limit: perPage,
+            // offset: (page - 1) * perPage,
+            // ordering: `${order === 'DESC' ? '-' : '' }${field}`,
             ...params.filter
         }
+        console.log(query, params)
 
         return axiosInstance(`/${resource}?${stringify(query)}`).then(({ data }) => ({
+        // return axiosInstance(`/${resource}`).then(({ data }) => ({
             data: data.results,
             total: data.total,
         }));

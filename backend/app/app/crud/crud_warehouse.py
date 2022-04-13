@@ -13,6 +13,15 @@ class CRUDWarehouse(CRUDBase[models.Warehouse, schemas.warehouse.WarehouseCreate
         self.add_manager(db= db, warehouse= created_warehouse, manager= store_owner)
 
         return created_warehouse
+    
+    def create_default(self, db: Session, *,  store_owner: models.User, store: models.Store):
+        warehouse_schema = schemas.WarehouseCreate(
+            name= "Mon premier magasin",
+            address= "Sans addresse",
+            store_id= store.id,
+        )
+        
+        return self.create(db= db, obj_in= warehouse_schema, store_owner= store_owner)
 
     def add_manager(self, db: Session, warehouse: models.Warehouse, manager: models.User):
         print(dir(warehouse.managers), warehouse.managers)

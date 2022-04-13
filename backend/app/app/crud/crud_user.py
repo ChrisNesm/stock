@@ -50,6 +50,13 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.refresh(user)
         return user
 
+    def set_ownership(self, db: Session, user: User, val: bool = True) -> bool:
+        user.is_owner = val
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
+
     def is_active(self, user: User) -> bool:
         return user.is_active
 

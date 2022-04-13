@@ -10,6 +10,7 @@ import LogoutButton from './components/LogoutButton';
 
 import UserCRUD from './pages/User'
 import StoreCRUD from './pages/Store'
+import WarehouseCRUD from './pages/Warehouse'
 
 const guessers = {
     list: ListGuesser,
@@ -28,7 +29,7 @@ const App = () => (
 
         <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
         <Resource  options={{label: "Mes Boutiques"}}  name="stores" {...StoreCRUD}  />
-        <Resource  options={{label: "Tous mes entrepots"}}  name="warehouses" {...guessers}  />
+        <Resource  options={{label: "Tous mes entrepots"}}  name="warehouses" {...WarehouseCRUD}  />
         <Resource  options={{label: "Tous mes article"}}  name="articles" {...guessers}  />
         <Resource  options={{label: "Commandes commandes"}}  name="orderers" {...guessers} />
     </Admin>

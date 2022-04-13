@@ -12,6 +12,9 @@ class CRUDStore(CRUDBase[models.Store, schemas.store.StoreCreate, schemas.store.
         obj_in.owner = owner.id
         created_store = super().create(db= db, obj_in= obj_in)
         crud.user.set_as_manager(db= db, user = owner)
+        crud.user.set_ownership(db= db, user = owner)
+
+        crud.warehouse.create_default(db= db, store_owner= owner, store= created_store)
 
         return created_store
 
