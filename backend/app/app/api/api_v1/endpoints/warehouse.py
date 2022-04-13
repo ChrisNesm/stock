@@ -71,7 +71,7 @@ def read_owned(
     # return warehouses
     return schemas.WarehouseRead(results= warehouses, total= len(warehouses))
 
-@router.get("/managed", response_model= schemas.WarehouseRead )
+@router.get("/", response_model= schemas.WarehouseRead )
 def read_managed(
     db: Session = Depends(deps.get_db),
     current_manager: models.User = Depends(deps.get_current_active_store_manager),

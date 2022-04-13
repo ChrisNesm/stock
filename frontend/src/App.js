@@ -9,6 +9,13 @@ import LoginPage from './pages/Login';
 import LogoutButton from './components/LogoutButton';
 
 import UserCRUD from './pages/User'
+import StoreCRUD from './pages/Store'
+
+const guessers = {
+    list: ListGuesser,
+    edit: EditGuesser,
+    show: ShowGuesser
+}
 
 const App = () => (
     <Admin 
@@ -20,6 +27,8 @@ const App = () => (
     	>
 
         <Resource name="users" {...UserCRUD}  />
+        <Resource name="stores" {...StoreCRUD}  />
+        <Resource name="warehouses" {...guessers}  />
     </Admin>
 );
 

@@ -12,12 +12,12 @@ services:
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
 
-  pgadmin:
-    image: dpage/pgadmin4
-    depends_on:
-      - db
-    env_file:
-      - .env
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   depends_on:
+  #     - db
+  #   env_file:
+  #     - .env
   
   backend:
     image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
@@ -35,6 +35,21 @@ services:
       dockerfile: backend.dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
+
+  frontend:
+    ports:
+    - "80:3000"
+    build:
+      context: ./frontend
+      args:
+        FRONTEND_ENV: dev
+    volumes:
+       - ./frontend/src/:/app/src/
+       - ./frontend/package.json:/app/package.json
+       - ./frontend/package-lock.json:/app/package-lock.json   
+      #  - ./frontend/node_modules:/app/node_modules
+       - ./frontend/.env:/app/.env   
+    command: npm start
 
 volumes:
   app-db-data:

@@ -64,7 +64,7 @@ def read_managed(
     return schemas.store.StoresRead(results= stores, total= len(stores))
 
 @router.get("/invite-manager", response_model= schemas.store.StoresRead )
-def read_managed(
+def invite_manager(
     db: Session = Depends(deps.get_db),
     current_manager: models.User = Depends(deps.get_current_active_store_manager),
 ):
