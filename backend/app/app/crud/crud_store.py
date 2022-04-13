@@ -24,6 +24,6 @@ class CRUDStore(CRUDBase[models.Store, schemas.store.StoreCreate, schemas.store.
     def list_managed(self, db: Session, manager: models.User):
         return db.query(self.model)\
             .join(models.Warehouse)\
-            .filter(models.Warehouse.managers.contains(manager)).all()
+            .filter(models.Warehouse.managers.contains(manager), self.model.is_active == True).all()
 
 store = CRUDStore(models.Store)

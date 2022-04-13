@@ -9,6 +9,7 @@ from app.db.base_class import Base
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
+UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
@@ -65,7 +66,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db_obj
 
     def delete(self, db: Session, *, id: int) -> ModelType:
+        return self.set_inactive(db= db, id= id)
+
+    def set_inactive(self, db: Session, *, id: int) -> ModelType:
         obj = db.query(self.model).get(id)
-        db.delete(obj)
+        obj.is_active = False
         db.commit()
+        db.refresh(obj)
         return obj

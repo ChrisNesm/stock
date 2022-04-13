@@ -26,9 +26,11 @@ const App = () => (
         theme={theme}
     	>
 
-        <Resource name="users" {...UserCRUD}  />
-        <Resource name="stores" {...StoreCRUD}  />
-        <Resource name="warehouses" {...guessers}  />
+        <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
+        <Resource  options={{label: "Mes Boutiques"}}  name="stores" {...StoreCRUD}  />
+        <Resource  options={{label: "Tous mes entrepots"}}  name="warehouses" {...guessers}  />
+        <Resource  options={{label: "Tous mes article"}}  name="articles" {...guessers}  />
+        <Resource  options={{label: "Toutes les commandes"}}  name="orders" {...guessers}  />
     </Admin>
 );
 

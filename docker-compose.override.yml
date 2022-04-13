@@ -15,7 +15,7 @@ services:
       - SERVER_HOST=http://${DOMAIN?Variable not set}
     build:
       context: ./backend
-      dockerfile: backend.dockerfile
+      dockerfile: Dockerfile.web
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
         INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
@@ -37,7 +37,3 @@ services:
        - ./frontend/.env:/app/.env   
     command: npm start
     
-networks:
-  traefik-public:
-    # For local dev, don't expect an external Traefik network
-    external: false

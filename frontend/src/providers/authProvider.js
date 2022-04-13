@@ -1,3 +1,4 @@
+import axios from 'axios';
 import axiosInstance, { refresh } from '../constants/axiosInstance'
 
 export default {

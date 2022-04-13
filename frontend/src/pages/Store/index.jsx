@@ -82,11 +82,17 @@ export const EditStore = (props) => (
 export const ShowStore = (props) => (
     <Edit  {...props}>
         <TabbedForm>
-            <FormTab label="Ma boutique" >
+            <FormTab label="Tableau de bord" >
                 <TextField source="name" />
                 <TextField source="address" />
             </FormTab>
-            <FormTab label="Mes entrepots" >
+            <FormTab label="entrepots" >
+                
+            </FormTab>
+            <FormTab label="gérants" >
+                
+            </FormTab>
+            <FormTab label="produits" >
                 
             </FormTab>
         </TabbedForm>
