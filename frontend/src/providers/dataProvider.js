@@ -39,26 +39,18 @@ export default {
     },
 
     getManyReference: (resource, params) => {
-        // const query = {
-        //     sort: JSON.stringify([field, order]),
-        //     range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-        //     filter: JSON.stringify({
-        //         ...params.filter,
-        //         [params.target]: params.id,
-        //     }),
-        // };
+        
         const { page, perPage } = params.pagination
         // const pagination = `limit=${perPage}&offset=${(page - 1) * perPage}`
 
         const { field, order } = params.sort;
         // const ordering = `ordering=${order === 'DESC' ? '-' : '' }${field}`
-        const target = `${params.target}__in`
         const query = stringify({
             limit: perPage,
             offset: (page - 1) * perPage,
             ordering: `${order === 'DESC' ? '-' : '' }${field}`,
             ...params.filter,
-            [target]: params.id
+
         })
 
         console.log('Getting MANY REFERENCES', params)

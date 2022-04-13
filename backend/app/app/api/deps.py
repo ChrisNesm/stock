@@ -73,3 +73,12 @@ def get_current_active_seller_or_store_manager(
     if not (crud.user.is_store_manager(current_user) or crud.user.is_seller(current_user) ):
         raise HTTPException(status_code=400, detail="Acces refusé")
     return current_user
+
+def get_current_active_owner(
+    current_user: models.User = Depends(get_current_user),
+) -> models.User:
+    if not crud.user.is_store_owner(current_user):
+        raise HTTPException(
+            status_code=400, detail="Acces refusé"
+        )
+    return current_user

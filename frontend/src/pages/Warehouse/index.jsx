@@ -57,18 +57,12 @@ export const EditWarehouse = (props) => (
 );
 
 export const ShowWarehouse = (props) => {
-    const all =  useGetList(
-        'warehouses/owned',
-        {}, {}, {
-            store_id: parseInt(props.id)
-        }
-    )
-    console.log(all)
+    const [ state, setState ] = useState([])
     
     useEffect(()=>{
         // console.log(props)
 
-    }, [])
+    }, [state])
     return (
         <Edit  {...props}>
             <TabbedForm>
@@ -77,7 +71,9 @@ export const ShowWarehouse = (props) => {
                     <TextField source="address" />
                 </FormTab>
                 <FormTab label="entrepots" >
-                    
+                    {
+
+                    }
                 </FormTab>
                 <FormTab label="gérants" >
                     

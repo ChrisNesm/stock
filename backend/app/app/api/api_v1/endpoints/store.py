@@ -74,6 +74,32 @@ def invite_manager(
     stores = crud.store.list_managed(db= db, manager= current_manager)
     return schemas.store.StoresRead(results= stores, total= len(stores))
 
+@router.get("/managers", response_model= schemas.user.UsersList )
+def read_store_managers(
+    db: Session = Depends(deps.get_db),
+    current_owner: models.User = Depends(deps.get_current_active_owner),
+):
+    """
+    List all manager related to my stores
+    """
+   
+    users = crud.store.list_managers_related_to_all_my_stores(db= db, owner= current_owner)
+    return schemas.user.UsersList(results= users, total= len(users))
+
+@router.get("{store_id}/managers", response_model= schemas.store.StoresRead )
+def read_store_managers(
+    store_id: int,
+    db: Session = Depends(deps.get_db),
+    current_owner: models.User = Depends(deps.get_current_active_owner),
+):
+    """
+    List all manager related to my stores
+    """
+    if store_id:
+        store = crud.store.get(db= db, id= store_id)
+        crud.user.list_store_managers
+    stores = crud.store.list_related_store_managers(db= db, manager= current_owner)
+    return schemas.store.StoresRead(results= stores, total= len(stores))
 @router.get("/{store_id}", response_model=schemas.StoresRetrieve)
 def retrieve(
     store_id: int,

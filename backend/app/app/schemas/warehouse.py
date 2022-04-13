@@ -23,7 +23,7 @@ class WarehouseInDBBase(WarehouseBase):
 
 # Properties to return API on read one
 class WarehouseRetrieve(WarehouseInDBBase):
-    pass
+    managers: List[schemas.user.User]
 
 # Properties to return API on retrieve multiple
 class WarehouseRead(BaseModel):

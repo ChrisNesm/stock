@@ -29,4 +29,11 @@ class CRUDStore(CRUDBase[models.Store, schemas.store.StoreCreate, schemas.store.
             .join(models.Warehouse)\
             .filter(models.Warehouse.managers.contains(manager), self.model.is_active == True).all()
 
+    # def list_managers_related_to_all_my_stores(self, db: Session, owner: models.User):
+    #     return crud.user.list_managers_related_to_owner(db= db, owner= owner)
+
+    # def list_managers_related_to_one_store(self, db: Session, store: models.Store):
+    #     crud.user.list_managers_related_to_store(db= db, store= store)
+    #     db.query()
+    
 store = CRUDStore(models.Store)

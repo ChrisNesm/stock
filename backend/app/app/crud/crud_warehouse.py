@@ -42,6 +42,10 @@ class CRUDWarehouse(CRUDBase[models.Warehouse, schemas.warehouse.WarehouseCreate
         return db.query(self.model)\
             .filter(models.Warehouse.managers.contains(manager)).all()
 
+    def list_related_to_store(self, db: Session, store: models.Store):
+        return db.query(self.model)\
+            .filter(models.Warehouse.store_id == store.id).all()    
+
     def is_user_manager_of(self, db: Session, warehouse: models.Warehouse, user: models.User):
         return db.query(self.model).filter(models.Warehouse.managers.contains(user)).first() and True
 

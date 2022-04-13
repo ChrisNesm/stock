@@ -6,7 +6,7 @@ from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-
+from app import schemas, models, crud
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
@@ -68,5 +68,29 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
    
     def is_seller(self, user: User) -> bool:
         return user.is_seller
+
+    def is_store_owner(self, user: User) -> bool:
+        return user.is_owner
+
+    # def list_managers_related_to_warehouse(self, db: Session, warehouse: models.Warehouse):
+    #     return  db.query(self.model)\
+    #         .join(models.Warehouse)\
+    #         .filter(models.Warehouse.id == warehouse.id)
+
+    # def list_managers_related_to_store(self, db: Session, store: models.Store):
+    #     return db.query(self.model)\
+    #         .join(models.Warehouse)\
+    #         .filter(models.Warehouse.store_id == store.id)\
+    #             .all()
+
+    # def list_managers_related_to_owner(self, db: Session, owner: models.User):
+    #     """
+    #     List all the users who are managers in a store belonging to another one
+    #     """
+    #     stores = crud.store.list_managed(db= db, manager= owner)
+    #     for s in stores :
+    #         self.list_managers_related_to_store(db= db, store= s)
+
+        
 
 user = CRUDUser(User)

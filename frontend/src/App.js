@@ -32,6 +32,7 @@ const App = () => (
         <Resource  options={{label: "Tous mes entrepots"}}  name="warehouses" {...WarehouseCRUD}  />
         <Resource  options={{label: "Tous mes article"}}  name="articles" {...guessers}  />
         <Resource  options={{label: "Commandes commandes"}}  name="orderers" {...guessers} />
+        <Resource  options={{label: "Commandes commandes"}}  name="articles" />
     </Admin>
 );
 

@@ -39,6 +39,8 @@ class UserInDBBase(UserBase):
 class User(UserInDBBase):
     pass
 
+class UserRetrieve(UserInDBBase):
+    pass
 
 # Additional properties stored in DB
 class UserInDB(UserInDBBase):
