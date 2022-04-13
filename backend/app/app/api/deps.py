@@ -47,7 +47,7 @@ def get_current_active_user(
     current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not crud.user.is_active(current_user):
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(status_code=400, detail="Acces refusé")
     return current_user
 
 
@@ -56,7 +56,7 @@ def get_current_active_superuser(
 ) -> models.User:
     if not crud.user.is_superuser(current_user):
         raise HTTPException(
-            status_code=400, detail="The user doesn't have enough privileges"
+            status_code=400, detail="Acces refusé"
         )
     return current_user
 
@@ -64,5 +64,12 @@ def get_current_active_store_manager(
     current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not crud.user.is_store_manager(current_user):
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(status_code=400, detail="Acces refusé")
+    return current_user
+
+def get_current_active_seller_or_store_manager(
+    current_user: models.User = Depends(get_current_user),
+) -> models.User:
+    if not (crud.user.is_store_manager(current_user) or crud.user.is_seller(current_user) ):
+        raise HTTPException(status_code=400, detail="Acces refusé")
     return current_user

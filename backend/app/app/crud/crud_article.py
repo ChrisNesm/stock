@@ -17,7 +17,7 @@ class CRUDArticle(CRUDBase[models.Article, schemas.article.ArticleCreate, schema
         return []
     def list_per_warehouse(self, db: Session, warehouse: models.Warehouse):
         return db.query(self.model)\
-            .filter(self.model.warehouse_id == warehouse.id, self.model.is_active == True).all()
+            .filter(self.model.warehouse_id == warehouse.id).all()
 
     def list_managed(self, db: Session, manager: models.User):
         warehouses = crud.warehouse.list_managed(db= db, manager= manager)

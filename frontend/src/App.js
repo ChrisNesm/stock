@@ -19,7 +19,7 @@ const guessers = {
 
 const App = () => (
     <Admin 
-    	title="My Custom Admin"
+    	title="Rooky stock"
         loginPage={LoginPage} 
     	dataProvider={dataProvider} 
     	authProvider={authProvider}  
@@ -30,7 +30,7 @@ const App = () => (
         <Resource  options={{label: "Mes Boutiques"}}  name="stores" {...StoreCRUD}  />
         <Resource  options={{label: "Tous mes entrepots"}}  name="warehouses" {...guessers}  />
         <Resource  options={{label: "Tous mes article"}}  name="articles" {...guessers}  />
-        <Resource  options={{label: "Toutes les commandes"}}  name="orders" {...guessers}  />
+        <Resource  options={{label: "Commandes commandes"}}  name="orderers" {...guessers} />
     </Admin>
 );
 

@@ -10,7 +10,7 @@ class ArticleBase(BaseModel):
     description: Optional[str] = None
     unit_price: Optional[int] = None
     quantity: Optional[int] = None
-
+    pending_quantity: Optional[int] = 0
     warehouse_id: Optional[int] = None
     
 # Properties to receive via API on creation

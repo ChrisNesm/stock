@@ -11,5 +11,8 @@ class Article(Base):
     unit_price = Column(Integer)
     quantity = Column(Integer)
 
+    # pending_quantity <= quantity
+    pending_quantity = Column(Integer)
+
     warehouse_id = Column(Integer, ForeignKey('warehouse.id'))
     

@@ -59,5 +59,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def is_store_manager(self, user: User) -> bool:
         return user.is_manager
    
+    def is_seller(self, user: User) -> bool:
+        return user.is_seller
 
 user = CRUDUser(User)
