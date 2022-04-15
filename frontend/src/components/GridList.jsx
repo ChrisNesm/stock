@@ -73,6 +73,7 @@ const LoadedGridList = (props) => {
     const { width } = props;
     const { ids, data, basePath, resource } = useListContext();
     const classes = useStyles();
+    console.log(ids, basePath, resource)
     if (!ids || !data) return null;
     return (
         <MuiGridList

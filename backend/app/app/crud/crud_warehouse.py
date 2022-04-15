@@ -24,14 +24,23 @@ class CRUDWarehouse(CRUDBase[models.Warehouse, schemas.warehouse.WarehouseCreate
         return self.create(db= db, obj_in= warehouse_schema, store_owner= store_owner)
 
     def add_manager(self, db: Session, warehouse: models.Warehouse, manager: models.User):
-        print(dir(warehouse.managers), warehouse.managers)
         warehouse.managers.append(manager)
         db.add(warehouse)
         db.commit()
         db.refresh(warehouse)
 
         crud.user.set_as_manager(db= db, user = manager)
-        
+
+    def remove_manager(self, db: Session, warehouse: models.Warehouse, manager: models.User):
+        if self.is_user_owner_of(db= db, warehouse=warehouse, user= manager ) :
+            raise Exception("Personne ne peut retirer l'accès au propriétaire de la boutique")
+        warehouse.managers.remove(manager)
+        db.add(warehouse)
+        db.commit()
+        db.refresh(warehouse)
+
+        crud.user.set_as_manager(db= db, user = manager)
+             
     def get_identic(self, db: Session, name: str, owner: models.User):
         return db.query(self.model).filter(self.model.name == name, self.model.owner == owner).first()
 
@@ -49,5 +58,7 @@ class CRUDWarehouse(CRUDBase[models.Warehouse, schemas.warehouse.WarehouseCreate
     def is_user_manager_of(self, db: Session, warehouse: models.Warehouse, user: models.User):
         return db.query(self.model).filter(models.Warehouse.managers.contains(user)).first() and True
 
+    def is_user_owner_of(self, db: Session, warehouse: models.Warehouse, user: models.User):
+        return db.query(models.Store).filter(models.Store.id == warehouse.store_id, models.Store.owner == user.id).first() and True
 
 warehouse = CRUDWarehouse(models.Warehouse)

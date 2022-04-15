@@ -11,6 +11,7 @@ const theme = createTheme(
 
       secondary: {
         main: "#ff9800", // Not far from orange
+        light: 'beige'
       },
     }
   })

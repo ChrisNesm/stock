@@ -18,7 +18,7 @@ export const ListWarehouse = props => {
 */    return (
         <List {...props}>       
             <Datagrid>
-                <ReferenceField source="store_id" reference="stores">
+                <ReferenceField source="store_id" reference="stores" label="Boutique" >
                     <TextField source="name" />
                 </ReferenceField>
                 <TextField source="name" />
@@ -45,7 +45,8 @@ export const CreateWarehouse = (props) => (
 export const EditWarehouse = (props) => (
     <Edit {...props}>
         <SimpleForm>
-           {/* <TabComponent /> */}
+        <TextInput source="name" />
+        <TextInput source="address" />
         </SimpleForm>
     </Edit>
 );

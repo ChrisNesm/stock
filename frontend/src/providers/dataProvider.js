@@ -125,4 +125,8 @@ export default {
         .then(({ data }) => ({
             data: data,
         })),
+    removeManager: ({id, user_id}) => axiosInstance(`/warehouses/${id}/remove-manager?user_id=${user_id}`)
+        .then(({ data }) => ({
+            data: data,
+        })),
 };

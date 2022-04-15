@@ -107,6 +107,36 @@ def add_manager(
     warehouses = crud.warehouse.add_manager(db= db, warehouse= warehouse, manager= future_manager)
     return future_manager
 
+@router.get("/{warehouse_id}/remove-manager", response_model= schemas.User )
+def remove_manager(
+    user_id: int,
+    warehouse_id: int,
+    db: Session = Depends(deps.get_db),
+    current_manager: models.User = Depends(deps.get_current_active_store_manager),
+):
+    """
+    Append a user to warehouse managers list
+    """
+    warehouse = crud.warehouse.get(db= db, id= warehouse_id)
+    previous_manager = crud.user.get(db= db, id= user_id)
+    if not previous_manager :
+        raise HTTPException(
+            status_code=400,
+            detail="L'utilisateur que vous voulez retirer n'existe pas encore sur la plateforme",
+        )
+    if not crud.warehouse.is_user_manager_of(db= db, warehouse= warehouse, user = current_manager) :
+        raise HTTPException(
+            status_code=400,
+            detail="Vous n'êtes pas habilité à retirer des gestionnaires dans magasin",
+        )
+    if crud.warehouse.is_user_owner_of(db= db, warehouse=warehouse, user= previous_manager ) :
+        raise HTTPException(
+            status_code=400,
+            detail="Personne ne peut retirer l'accès au propriétaire de la boutique",
+        )
+    warehouses = crud.warehouse.remove_manager(db= db, warehouse= warehouse, manager= previous_manager)
+    return previous_manager
+    
 @router.get("/{warehouse_id}", response_model=schemas.WarehouseRetrieve)
 def retrieve(
     warehouse_id: int,
@@ -124,7 +154,7 @@ def retrieve(
         )
     return warehouse
 
-@router.patch("/{warehouse_id: int}", response_model=schemas.WarehouseRetrieve)
+@router.patch("/{warehouse_id}", response_model=schemas.WarehouseRetrieve)
 def update(
     warehouse_id: int,
     warehouse_in: schemas.WarehouseUpdate,

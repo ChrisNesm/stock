@@ -18,8 +18,9 @@ import theme from '../../constants/theme';
 import { Modal, makeStyles, Chip, Button, Typography } from '@material-ui/core';
 import GridList from '../../components/GridList';
 import TabComponent from '../../components/TabComponent'
-import AddManager, { AddManagerIcon } from '../../components/AddManager';
+import AddManager, { AddManagerIcon, AddManagerModal } from '../../components/AddManager';
 import UserChip from '../../components/UserChip/index';
+import ListManagers from '../../components/ListManagers'
 
 import AddBox from '@material-ui/icons/AddBox';
 export const ListStore = props => {
@@ -73,8 +74,6 @@ const Title = (props) => {
 }
 
 export const ShowStore = (props) => {
-    const [ open, setOpen ] = useState();
-    const handleAddManager = () => setOpen(prev => !prev)
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
     return (
@@ -137,92 +136,7 @@ export const ShowStore = (props) => {
                         <>
                             
                             <ArrayField source="warehouses">
-                                {
-                                    isSmall ? (
-                                        <SimpleList 
-                                            primaryText={<TextField source="name" style={{marginBottom: 20, color: 'white'}} />}
-                                            secondaryText={
-                                                <ArrayField source="managers">
-                                                    <SingleFieldList>
-                                                        <UserChip />
-                                                    </SingleFieldList>
-                                                </ArrayField>
-                                            }
-                                            rightAvatar={ row =>(
-                                                <AddBox className="link" onClick={handleAddManager} color="secondary"  />
-                                            )}
-                                            rightIcon={ row =>(
-                                                <Typography classKey="subtitle1" color="secondary" onClick={handleAddManager}  >
-                                                    Ajouter 
-                                                </Typography>
-                                            )}
-                                            tertiaryText={
-                                                <Modal
-                                                    open={open}
-                                                    onClose={handleAddManager}
-                                                    aria-labelledby="simple-modal-title"
-                                                    aria-describedby="simple-modal-description"
-                                                    >
-                                                    <Card style={{
-                                                        position: 'absolute',
-                                                        top: '30%',
-                                                        width: isSmall ? '80vw' : '40vw',
-                                                        left: isSmall ? '10vw' : '30vw',
-                                                        height: '50vh',
-                                                        display: 'flex',
-                                                        verticalAlign: 'center',
-                                                        alignItems: 'center'
-                                                    }}>
-                                                        <AddManager callback={handleAddManager} />
-                                                    
-                                                    </Card>
-                                                    </Modal>
-                                            }
-                                            rowStyle={record => ({
-                                                display: 'flew',
-                                                backgroundColor: theme.palette.secondary.dark
-                                            })}
-                                            linkType={false}
-
-                                        />
-                                                
-
-                                    ) : (
-
-                                    <Datagrid rowStyle={row => ({backgroundColor: 'beige'})} rowClick={false} >
-                                                <Modal
-                                            open={open}
-                                            onClose={handleAddManager}
-                                            aria-labelledby="simple-modal-title"
-                                            aria-describedby="simple-modal-description"
-                                            >
-                                                <Card style={{
-                                                    position: 'absolute',
-                                                    top: '30%',
-                                                    width: isSmall ? '80vw' : '40vw',
-                                                    left: isSmall ? '10vw' : '30vw',
-                                                    height: '50vh',
-                                                    display: 'flex',
-                                                    verticalAlign: 'center',
-                                                    alignItems: 'center'
-                                                }}>
-                                                    <AddManager callback={handleAddManager} />
-                                                </Card>
-                                            </Modal>
-                                            <TextField  source="name" />
-                                            <ArrayField source="managers">
-                                                <SingleFieldList>
-                                                   <UserChip />
-                                                </SingleFieldList>
-                                            </ArrayField>
-                                            <Typography classKey="body2" className='link-add-manager' color="secondary" onClick={handleAddManager}  >
-                                                   <AddManagerIcon onClick={handleAddManager} label="Ajouter" />
-                                                </Typography>
-                                           
-                                        
-                                    </Datagrid>
-                                    )
-                                }
+                                <ListManagers />
                             </ArrayField>
                         </>,
                        

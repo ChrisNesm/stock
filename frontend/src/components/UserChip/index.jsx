@@ -4,16 +4,16 @@ import { Chip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import './index.css'
 
-export default () => {
+export default ({getText, activeLink}) => {
   
     const record = useRecordContext()
     return (
       <>
-      <Link to={linkToRecord('/users', record.id, 'show')} >
+      <Link to={activeLink && linkToRecord('/users', record.id, 'show')} >
         <Chip 
         label={
             <span style={{display: 'flex', alignItems: 'center', alignContent: 'center', verticalAlign: 'center'}} >
-            {record.email + ' '}
+            {getText ? getText(record) : record.email }
           </span>
         }
         className="link-user-name"  />

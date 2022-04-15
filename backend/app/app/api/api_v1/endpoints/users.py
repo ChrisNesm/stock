@@ -65,7 +65,7 @@ def update_user_me(
     db: Session = Depends(deps.get_db),
     password: str = Body(None),
     full_name: str = Body(None),
-    email: EmailStr = Body(None),
+    email: str = Body(None),
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
