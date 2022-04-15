@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 from app import schemas
-
+from . import article
 # Shared properties
 class WarehouseBase(BaseModel):
     id: Optional[int] = None
@@ -24,10 +24,10 @@ class WarehouseInDBBase(WarehouseBase):
 # Properties to return API on read one
 class WarehouseRetrieve(WarehouseInDBBase):
     managers: List[schemas.user.User]
-
+    articles: List[schemas.article.ArticleRetrieve]
 # Properties to return API on retrieve multiple
 class WarehouseRead(BaseModel):
-    results: List[WarehouseInDBBase]
+    results: List[WarehouseRetrieve]
     total: int
 
 # Properties to receive via API on update

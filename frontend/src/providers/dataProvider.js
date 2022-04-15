@@ -121,4 +121,8 @@ export default {
         //     params: JSON.stringify(params.data),
         // }).then(({ json }) => ({ data: json }));
     },
+    setManager: ({id, user_id}) => axiosInstance(`/warehouses/${id}/add-manager?user_id=${user_id}`)
+        .then(({ data }) => ({
+            data: data,
+        })),
 };

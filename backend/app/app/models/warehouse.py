@@ -16,3 +16,4 @@ class Warehouse(Base):
     
     store_id = Column(Integer, ForeignKey('store.id'))
     managers = relationship('User', secondary= user__warehouse, back_populates='managed_warehouses')
+    articles = relationship('Article')

@@ -1,50 +1,47 @@
 import React, { cloneElement, useRef, useMemo, useState, useEffect } from 'react';
 import {
-    List, Edit, Create, Datagrid, SimpleForm, TopToolbar, DatagridBody,
+    List, Edit, Create, Datagrid, SimpleForm, TopToolbar, SimpleList,
     FilterList, FilterListItem, FilterLiveSearch,
     CreateButton, EditButton, ExportButton, DeleteButton, ShowButton,
-    TextField, DateField, ReferenceField, SelectField, BooleanField, ReferenceManyField, ArrayField,
+    TextField, DateField, ReferenceField, SelectField, BooleanField, ReferenceManyField, ArrayField, NumberField,
     TextInput, DateInput, ReferenceInput, SelectInput, BooleanInput,
-    useListContext, useTranslate, useMediaQuery, useRecordContext, useDataProvider, useResourceContext,
+    useListContext, useTranslate, useRecordContext, useDataProvider, useResourceContext,
     sanitizeListRestProps, DatagridLoading, ListContextProvider, 
-    TabbedForm, FormTab, useGetList, SingleFieldList, ChipField, Show
+    Form, SingleFieldList, ChipField, Show,
+    linkToRecord,
+    useGetOne,
+    Link
 } from 'react-admin'
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import { Card } from '@material-ui/core';
 import ActionButton from '../../components/ActionButton'
+import { Card, CardContent, CardHeader, useMediaQuery } from '@material-ui/core';
+import theme from '../../constants/theme';
+import { Modal, makeStyles, Chip, Button, Typography } from '@material-ui/core';
+import GridList from '../../components/GridList';
+import TabComponent from '../../components/TabComponent'
+import AddManager, { AddManagerIcon } from '../../components/AddManager';
+import UserChip from '../../components/UserChip/index';
 
-import {Link} from 'react-router-dom'
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-
-
-// const CreateRelatedNiveauBtn = ({ record }) => (
-//     <Button
-//         component={Link}
-//         to={{
-//             pathname: '/niveau/create',
-//             state: { record: { annee: record.id } },
-//         }}
-//     >
-//         Ajouter un niveau
-//     </Button>
-// );
-
-
+import AddBox from '@material-ui/icons/AddBox';
 export const ListStore = props => {
-/*    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
-*/    return (
+    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
+        return (
         <List {...props}>       
-            <Datagrid>
-                <TextField source="id" />
+            { isSmall ? (
+                <SimpleList
+                primaryText={record => record.name}
+                secondaryText={record => `${record.address}`}
+                tertiaryText={record => record.is_active}
+                linkType={record => record.canEdit ? "edit" : "show"}
+                rowStyle={record => ({ backgroundColor: theme.palette.secondary.main, marginBottom: 10 })}
+            />
+            ) : (
+                <Datagrid {...props} >
                 <TextField source="name" />
                 <TextField source="address" />
-                <BooleanField source="is_active" />
                 <ActionButton actions="edit,show,delete" />
                 {/* <CreateRelatedNiveauBtn /> */}
             </Datagrid>
+            ) }
         </List>
     );
 };
@@ -67,56 +64,171 @@ export const EditStore = (props) => (
     </Edit>
 );
 
-export const ShowStore = (props) => {
+const Title = (props) => {
+    const [ title, setTitle ] = useState("...")
+    const { data } = useGetOne(props.resource, props.id)
+    // console.log(data)
     
+    return <h3>{data ? data.name : title}</h3>
+}
+
+export const ShowStore = (props) => {
+    const [ open, setOpen ] = useState();
+    const handleAddManager = () => setOpen(prev => !prev)
+    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
     return (
-        <Show  {...props}>
-            <TabbedForm>
-                <FormTab label="Tableau de bord" >
-                    <TextField source="name" />
-                    <TextField source="address" />
-                    <Button label="Yes" text="Text" />
-                </FormTab>
-                <FormTab label="entrepots" >
-                    
-                    <ArrayField source="warehouses">
-                        <SingleFieldList>
-                            <ChipField source="name" />
-                        </SingleFieldList>
-                    </ArrayField>
-      
-                </FormTab>
-                <FormTab label="gérants (owner)" >
-                    <Button label="Yes" text="Text" />
-                    <ArrayField source="warehouses">
-                        <Datagrid>
-                            <>
-                                <TextField  source="name" />
-                                <ArrayField source="managers">
-                                    <SingleFieldList>
-                                        <ChipField source="full_name" />
-                                    </SingleFieldList>
-                                </ArrayField>
-                                <br />
-                            </>
-                        </Datagrid>
-                    </ArrayField>
-                </FormTab>
-                <FormTab label="produits" >
-                    <ArrayField source="warehouses">
-                        <Datagrid>
-                            <TextField  source="name" />
-                            <ReferenceField source='id' reference='articles' >
-                                <>
-                                <TextField  source="name" />
-                                <TextField  source="description" />
-                                <TextField  source="quantity" />
-                                </>
-                            </ReferenceField>
-                        </Datagrid>
-                    </ArrayField>
-                </FormTab>
-            </TabbedForm>
+        <Show  {...props} title={<Title {...props} />} l>
+            <div style={{}}>
+
+                <TabComponent 
+                
+                    tabs={[
+                        {label: "Articles"},
+                        {label: "Tableau de board"},
+                        {label: "Magasins"},
+                        {label: "Gérants"},
+                    ]}
+                    panels={[
+                        <>
+                            <ArrayField source="warehouses">
+                                <Datagrid rowStyle={row => ({width: '100vw', backgroundColor: 'white'})} >
+                                    <ArrayField source="articles">
+                                        <GridList 
+                                            getTitle={rec => `${rec.name}`}
+                                            getSubtitle={rec => (
+                                                <span>
+                                                    <NumberField
+                                                        source="unit_price"
+                                                        record={rec}
+                                                        color="inherit"
+                                                        options={{
+                                                            style: 'currency',
+                                                            currency: 'XOF',
+                                                        }}
+                                                        
+                                                    />
+                                                </span>
+                                            )}
+                                            image={null}
+                                            to={id => linkToRecord('/articles', id, 'show')}
+                                            getActionIcon={rec => (<Chip size='small' label={`Commandé: ${rec.pending_quantity}/${rec.quantity}`} />)}
+                                            
+                                        />
+                                    </ArrayField>
+
+                                </Datagrid>
+
+                            </ArrayField>
+                        </>,
+                        <>
+                            <TextField source="name" />
+                            <TextField source="address" />
+                        </>,
+                        <div>
+                            
+                            <ArrayField source="warehouses">
+                                <SingleFieldList>
+                                    <ChipField source="name" />
+                                </SingleFieldList>
+                            </ArrayField>
+                            
+                        </div>,
+                        <>
+                            
+                            <ArrayField source="warehouses">
+                                {
+                                    isSmall ? (
+                                        <SimpleList 
+                                            primaryText={<TextField source="name" style={{marginBottom: 20, color: 'white'}} />}
+                                            secondaryText={
+                                                <ArrayField source="managers">
+                                                    <SingleFieldList>
+                                                        <UserChip />
+                                                    </SingleFieldList>
+                                                </ArrayField>
+                                            }
+                                            rightAvatar={ row =>(
+                                                <AddBox className="link" onClick={handleAddManager} color="secondary"  />
+                                            )}
+                                            rightIcon={ row =>(
+                                                <Typography classKey="subtitle1" color="secondary" onClick={handleAddManager}  >
+                                                    Ajouter 
+                                                </Typography>
+                                            )}
+                                            tertiaryText={
+                                                <Modal
+                                                    open={open}
+                                                    onClose={handleAddManager}
+                                                    aria-labelledby="simple-modal-title"
+                                                    aria-describedby="simple-modal-description"
+                                                    >
+                                                    <Card style={{
+                                                        position: 'absolute',
+                                                        top: '30%',
+                                                        width: isSmall ? '80vw' : '40vw',
+                                                        left: isSmall ? '10vw' : '30vw',
+                                                        height: '50vh',
+                                                        display: 'flex',
+                                                        verticalAlign: 'center',
+                                                        alignItems: 'center'
+                                                    }}>
+                                                        <AddManager callback={handleAddManager} />
+                                                    
+                                                    </Card>
+                                                    </Modal>
+                                            }
+                                            rowStyle={record => ({
+                                                display: 'flew',
+                                                backgroundColor: theme.palette.secondary.dark
+                                            })}
+                                            linkType={false}
+
+                                        />
+                                                
+
+                                    ) : (
+
+                                    <Datagrid rowStyle={row => ({backgroundColor: 'beige'})} rowClick={false} >
+                                                <Modal
+                                            open={open}
+                                            onClose={handleAddManager}
+                                            aria-labelledby="simple-modal-title"
+                                            aria-describedby="simple-modal-description"
+                                            >
+                                                <Card style={{
+                                                    position: 'absolute',
+                                                    top: '30%',
+                                                    width: isSmall ? '80vw' : '40vw',
+                                                    left: isSmall ? '10vw' : '30vw',
+                                                    height: '50vh',
+                                                    display: 'flex',
+                                                    verticalAlign: 'center',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <AddManager callback={handleAddManager} />
+                                                </Card>
+                                            </Modal>
+                                            <TextField  source="name" />
+                                            <ArrayField source="managers">
+                                                <SingleFieldList>
+                                                   <UserChip />
+                                                </SingleFieldList>
+                                            </ArrayField>
+                                            <Typography classKey="body2" className='link-add-manager' color="secondary" onClick={handleAddManager}  >
+                                                   <AddManagerIcon onClick={handleAddManager} label="Ajouter" />
+                                                </Typography>
+                                           
+                                        
+                                    </Datagrid>
+                                    )
+                                }
+                            </ArrayField>
+                        </>,
+                       
+                    ]} />
+            </div>
+
         </Show>
     )
 }

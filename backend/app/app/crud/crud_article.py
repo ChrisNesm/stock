@@ -8,7 +8,10 @@ from app import models, schemas, crud
 
 
 class CRUDArticle(CRUDBase[models.Article, schemas.article.ArticleCreate, schemas.article.ArticleUpdate]):
-        
+    def create(self, db: Session, *, obj_in: schemas.ArticleCreate) -> models.Article:
+        obj_in.pending_quantity = obj_in.quantity
+        return super().create(db= db, obj_in = obj_in)
+    
     def list_per_store(self, db: Session, store: models.Store):
         warehouses = db.query(models.Warehouse).filter(models.Warehouse.store_id == store.id).all()
         if warehouses :

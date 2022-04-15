@@ -14,8 +14,14 @@ class ArticleBase(BaseModel):
     warehouse_id: Optional[int] = None
     
 # Properties to receive via API on creation
-class ArticleCreate(ArticleBase):
-    pass
+class ArticleCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    unit_price: int
+    quantity: int
+    pending_quantity: Optional[int] = 0
+    warehouse_id: int
+    
 
 class ArticleInDBBase(ArticleBase):
     class Config:

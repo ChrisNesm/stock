@@ -1,0 +1,5 @@
+.link-user-name:hover {
+    background-color: rgb(18, 96, 148);
+    color: white;
+    cursor: pointer;
+}

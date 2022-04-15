@@ -82,8 +82,8 @@ def read_managed(
     warehouses = crud.warehouse.list_managed(db= db, manager= current_manager)
     return schemas.WarehouseRead(results= warehouses, total= len(warehouses))
 
-@router.get("/add-manager", response_model= schemas.User )
-def read_managed(
+@router.get("/{warehouse_id}/add-manager", response_model= schemas.User )
+def add_manager(
     user_id: int,
     warehouse_id: int,
     db: Session = Depends(deps.get_db),
@@ -124,7 +124,7 @@ def retrieve(
         )
     return warehouse
 
-@router.patch("/{warehouse_id}", response_model=schemas.WarehouseRetrieve)
+@router.patch("/{warehouse_id: int}", response_model=schemas.WarehouseRetrieve)
 def update(
     warehouse_id: int,
     warehouse_in: schemas.WarehouseUpdate,
@@ -148,7 +148,7 @@ def update(
         )
     return crud.warehouse.update(db, db_obj= warehouse, obj_in= warehouse_in)
 
-@router.delete("/{warehouse_id}", response_model=schemas.WarehouseRetrieve)
+@router.delete("/{warehouse_id: int}", response_model=schemas.WarehouseRetrieve)
 def delete(
     warehouse_id: int,
     db: Session = Depends(deps.get_db),
