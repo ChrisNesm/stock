@@ -92,7 +92,7 @@ const StoreListManagers = () => {
                         secondaryText={
                             <ArrayField source="managers">
                                 <SingleFieldList>
-                                    <UserChip />
+                                 <UserChip getText={rec =>  `${rec.full_name}, ${rec.email}`} />
                                 </SingleFieldList>
                             </ArrayField>
                         }
@@ -119,7 +119,7 @@ const StoreListManagers = () => {
                         <TextField  source="name" />
                         <ArrayField source="managers">
                             <SingleFieldList>
-                                <UserChip />
+                            <UserChip getText={rec =>  `${rec.full_name}, ${rec.email}`} />
                             </SingleFieldList>
                         </ArrayField>
                         

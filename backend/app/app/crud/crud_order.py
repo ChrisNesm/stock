@@ -56,27 +56,32 @@ class CRUDOrder(CRUDBase[models.Order, schemas.OrderCreate, schemas.OrderUpdate]
 
     def validate(self, db: Session, order: models.Order):
         """
-        A warehouse manager should see orders that involve one of its articles
+        Confirm an order
         """
         order.status = schemas.order.OrderStatus.DONE
         db.add(order)
         db.commit()
         db.refresh(order)
         return order
-    
+
+    def reject(self, db: Session, order: models.Order):
+        """
+        Reject an order
+        """
+        order.status = schemas.order.OrderStatus.REJECTED
+        db.add(order)
+        db.commit()
+        db.refresh(order)
+        return order   
+
     def cancel(self, db: Session, order: models.Order):
         """
-        A warehouse manager should see orders that involve one of its articles
+        Cancel an order
         """
         order.status = schemas.order.OrderStatus.CANCELLED
         db.add(order)
         db.commit()
         db.refresh(order)
         return order
-    # def list_per_store(self, db: Session, store: models.Store, owner: models.User):
-    #     """
-    #     A warehouse manager should see orders that involve one of its articles
-    #     """
-    #     return self.list_ordered(db= db, article= article, user= user).extend(self.list_ordered(db= db, article= article, user= user))
 
 order = CRUDOrder(models.Order)

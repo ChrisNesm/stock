@@ -21,17 +21,20 @@ def create(
     Create new article.
     """
     if order_in.order_quantity <= 0 :
+        print(1)
         raise HTTPException(
             status_code=400,
             detail="La quantité de la commande doit être supérieure à 0",
         )
     related_article = crud.article.get(db= db , id= order_in.article_id)
     if not related_article :
+        print(2)
         raise HTTPException(
             status_code=400,
             detail="Article inexistant",
         )
     if related_article.pending_quantity <  order_in.order_quantity:
+        print(3)
         raise HTTPException(
             status_code=400,
             detail="Stock insuffisant pour créer votre commande",

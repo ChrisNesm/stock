@@ -56,8 +56,6 @@ export const CreateUser = (props) => (
             <BooleanInput source="is_owner" />
             <BooleanInput source="is_seller" />
             <BooleanInput source="is_manager" />
-            <BooleanInput source="is_active" />
-            <BooleanInput source="is_superuser" />
         </SimpleForm>
     </Create>
 );

@@ -8,6 +8,7 @@ class OrderStatus(enum.Enum):
     PENDING = "PENDING"
     CANCELLED = "CANCELLED"
     DONE = "DONE"
+    REJECTED = "REJECTED"
 
 # Shared properties
 class OrderBase(BaseModel):
