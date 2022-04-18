@@ -12,6 +12,7 @@ import UserCRUD from './pages/User'
 import StoreCRUD from './pages/Store'
 import WarehouseCRUD from './pages/Warehouse'
 import OrderCRUD from './pages/Order'
+import ArticleCRUD from "./pages/Article";
 // require('dotenv').config();
 const guessers = {
     list: ListGuesser,
@@ -30,7 +31,7 @@ const App = () => (
         <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
         <Resource  options={{label: "Mes Boutiques"}}  name="stores" {...StoreCRUD}  />
         <Resource  options={{label: "Tous mes entrepots"}}  name="warehouses" {...WarehouseCRUD}  />
-        <Resource  options={{label: "Tous mes articles"}}  name="articles" {...guessers}  />
+        <Resource  options={{label: "Tous mes articles"}}  name="articles" {...ArticleCRUD}  />
         <Resource  options={{label: "Commandes"}}  name="orderers" {...OrderCRUD} />
     </Admin>
 );
