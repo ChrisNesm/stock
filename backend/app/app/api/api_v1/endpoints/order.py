@@ -117,8 +117,32 @@ def validate_order(
     crud.order.validate(db= db, order= order)
     return order
 
-@router.get("/{order_id}/validate", response_model=schemas.OrderRetrieve)
+@router.get("/{order_id}/cancel", response_model=schemas.OrderRetrieve)
 def cancel_order(
+    order_id: int,
+    db: Session = Depends(deps.get_db),
+    seller: models.User = Depends(deps.get_current_active_seller_or_store_manager),
+) -> Any:
+    """
+    Cancel an order.
+    Only for the initiator and one of the warehouse managers
+    """
+    order = crud.order.get(db= db, id= order_id)
+    if not order:
+        raise HTTPException(
+            status_code=400,
+            detail="Commande inexistant",
+        )
+    if order.orderer_id != seller.id :
+        raise HTTPException(
+            status_code=400,
+            detail="Seul le créateur d'une commande peut l'annuler",
+        )
+    crud.order.reject(db= db, order= order)
+    return order
+
+@router.get("/{order_id}/reject", response_model=schemas.OrderRetrieve)
+def reject_order(
     order_id: int,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_seller_or_store_manager),
@@ -131,7 +155,7 @@ def cancel_order(
     if not order:
         raise HTTPException(
             status_code=400,
-            detail="Commande inexistant",
+            detail="Commande inexistante",
         )
     warehouse = crud.warehouse.get(db= db, id= crud.article.get(db= db, id= order.article_id).warehouse_id)
     if not (crud.warehouse.is_user_manager_of(warehouse) or order.orderer_id != current_user.id ):
@@ -139,5 +163,5 @@ def cancel_order(
             status_code=400,
             detail="Vous n'êtes pas habilité à valider cette commande",
         )
-    crud.order.validate(db= db, order= order)
+    crud.order.reject(db= db, order= order)
     return order
