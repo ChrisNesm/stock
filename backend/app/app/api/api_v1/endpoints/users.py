@@ -83,6 +83,31 @@ def update_user_me(
     user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
     return user
 
+@router.get("/all", response_model= schemas.UsersList)
+def read_all(
+    db: Session = Depends(deps.get_db),
+    seller: models.User = Depends(deps.get_current_active_superuser),
+):
+    """
+    List all orders. SU option
+    """
+    orders = crud.user.get_all(db= db)
+    return schemas.UsersList(results= orders, total= len(orders))
+
+
+@router.get("/many", response_model= schemas.UsersList)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i ]
+    articles = crud.order.get_many(db= db, ids= ids)
+    return schemas.UsersList(results= articles, total= len(articles))
+
 
 @router.get("/{user_id}", response_model=schemas.User)
 def read_user_me(
@@ -113,6 +138,12 @@ def update_user(
         raise HTTPException(
             status_code=404,
             detail="The user with this username does not exist in the system",
+        )
+    if user.id == current_user.id :
+        if user_in.is_manager or user_in.is_seller or user_in.is_owner :
+            raise HTTPException(
+            status_code=404,
+            detail="An admin cannot become neither manager nor seller",
         )
     user = crud.user.update(db, db_obj=user, obj_in=user_in)
     return user

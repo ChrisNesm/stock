@@ -23,6 +23,31 @@ def create(
     # TODO: set user permissions
     return crud.article.create(db, obj_in = article_in)
 
+@router.get("/all", response_model= schemas.ArticleRead)
+def read_all(
+    store_id: Optional[int] = None,
+    warehouse_id: Optional[int] = None,
+    db: Session = Depends(deps.get_db),
+    su: models.User = Depends(deps.get_current_active_superuser),
+):
+    """
+    List all articles. SU option
+    """
+    articles = crud.article.get_all(db= db)
+    return schemas.ArticleRead(results= articles, total= len(articles))
+
+@router.get("/many", response_model= schemas.ArticleRead)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i ]
+    articles = crud.article.get_many(db= db, ids= ids)
+    return schemas.ArticleRead(results= articles, total= len(articles))
 
 @router.get("/", response_model= schemas.ArticleRead)
 def read_mine(

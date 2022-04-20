@@ -16,6 +16,8 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         obj_in_data = jsonable_encoder(obj_in)
         obj_in_data['hashed_password'] = get_password_hash(obj_in_data['password'])
         del obj_in_data['password']
+        if obj_in_data['is_owner'] :
+            obj_in_data['is_manager'] = True
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
         db.commit()

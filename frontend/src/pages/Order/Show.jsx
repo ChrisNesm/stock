@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import {
     List, Edit, Show, Create, Datagrid, SimpleForm, TopToolbar, DatagridBody, SimpleShowLayout, ShowView, ShowController,
-    CreateButton, EditButton, ExportButton, DeleteButton, ShowButton, Button,
+    CreateButton, EditButton, ExportButton, DeleteButton, ShowButton,
     ReferenceInput, SelectInput,
     TextField, DateField, ReferenceField, SelectField, BooleanField, ReferenceManyField, ArrayField, SingleFieldList, ChipField,
     RecordContextProvider,
     TabbedForm, FormTab, useGetList, TabbedFormTabs, useGetOne, NumberField, linkToRecord
 } from 'react-admin'
-import { Box, Card, CardContent, Chip , Typography} from '@material-ui/core';
+import { Box, Card, CardContent, Chip , Typography, Button} from '@material-ui/core';
 import ActionButton from '../../components/ActionButton';
 import CustomChip from '../../components/CustomChip';
 import UserChip from '../../components/UserChip';
 import orderStatus from '../../constants/orderStatus';
 import ConfimOrder from '../../components/ConfirmOrder';
-
+import {AdminOnly, ManagerOnly} from '../../components/Restrictors'
 
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
@@ -67,10 +67,16 @@ export default (props) => {
                                     <UserChip getText={rec => `Commandé par: ${rec.full_name}, ${rec.email}`} />
                                 </Typography>
                             </ReferenceField>
-                            <Box width="100vw">
-                                <ConfimOrder label="Confirmer la commande"/>
-                                <ConfimOrder label="Rejeter la commande" />
-                            </Box>
+                            <AdminOnly negate={true}>
+                                <Box width="100vw">
+                                    <ConfimOrder label="Confirmer la commande"/>
+                                    {/* <ConfimOrder label="Rejeter la commande" /> */}
+                                    <Button label="Rejeter la commande" variant='error'>
+                                        Rejeter la commande
+                                    </Button>
+                                </Box>
+
+                            </AdminOnly>
                         </SimpleShowLayout>
 
                     </RecordContextProvider>

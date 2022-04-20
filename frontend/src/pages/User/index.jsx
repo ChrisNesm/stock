@@ -29,7 +29,9 @@ import Typography from '@material-ui/core/Typography';
 
 export const ListUsers = props => {
 /*    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
-*/    return (
+*/    
+    console.log("User")
+    return (
         <List {...props}>       
             <Datagrid>
                 <TextField source="id" />
@@ -40,7 +42,7 @@ export const ListUsers = props => {
                 <BooleanField source="is_manager" />
                 <BooleanField source="is_active" />
                 <BooleanField source="is_superuser" />
-                <ActionButton actions="show,edit,delete" />
+                <ActionButton actions="show,delete" />
                 {/* <CreateRelatedNiveauBtn /> */}
             </Datagrid>
         </List>

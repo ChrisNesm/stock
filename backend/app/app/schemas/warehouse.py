@@ -25,6 +25,8 @@ class WarehouseInDBBase(WarehouseBase):
 class WarehouseRetrieve(WarehouseInDBBase):
     managers: List[schemas.user.User]
     articles: List[schemas.article.ArticleRetrieve]
+    business_providers: List[schemas.user.UserRetrieve]
+    
 # Properties to return API on retrieve multiple
 class WarehouseRead(BaseModel):
     results: List[WarehouseRetrieve]

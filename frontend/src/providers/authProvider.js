@@ -14,12 +14,19 @@ export default {
             } 
         })
         
-         .then(({data, status, statusText}) => {
+         .then(async ({data, status, statusText}) => {
             if (status < 200 || status >= 300) {
                 throw new Error(statusText);
             }
             else {
                 localStorage.setItem('auth', `${data['token_type']} ${data['access_token']}`);
+                await axiosInstance({
+                    url: '/users/me', 
+                    method: "get"
+                }).then(({data, status, statusText}) => {
+                    localStorage.setItem('permissions', JSON.stringify(data))
+
+                })
                 refresh()
 
             }
@@ -32,6 +39,7 @@ export default {
     // called when the user clicks on the logout button
     logout: () => {
         localStorage.removeItem('auth');
+        localStorage.removeItem('permissions');
         console.log("logout")
         return Promise.resolve();
     },
@@ -61,7 +69,20 @@ export default {
     },
     // called when the user navigates to a new location, to check for permissions / roles
     getPermissions: (props) => {
-        console.log("get permissions with", props)
-        return Promise.resolve()
+        let perms = localStorage.getItem('permissions')
+        if (perms) return Promise.resolve(JSON.parse(perms))
+        else return axiosInstance({
+            url: '/users/me', 
+            method: "get"
+        }).then(({data, status, statusText}) => {
+            if (status < 200 || status >= 300) {
+                throw new Error(statusText);
+            }
+            else {
+                
+            }
+            return Promise.resolve(data)
+        })
+        // return Promise.resolve()
     },
 };

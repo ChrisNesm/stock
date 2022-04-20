@@ -1,8 +1,8 @@
 import axiosInstance from '../constants/axiosInstance'
 import { stringify } from 'query-string';
-
+import authProvider from './authProvider';
 export default {
-    getList: (resource, params) => {
+    getList: async (resource, params) => {
         const { page, perPage } = params.pagination;
         const pagination = `limit=${perPage}&offset=${(page - 1) * perPage}`
 
@@ -17,9 +17,11 @@ export default {
             // ordering: `${order === 'DESC' ? '-' : '' }${field}`,
             ...params.filter
         }
-        console.log(query, params)
-
-        return axiosInstance(`/${resource}?${stringify(query)}`).then(({ data }) => ({
+        // console.log(query, params)
+        const  perms = await authProvider.getPermissions()
+        console.log("dataP perms", perms, perms.is_superuser)
+        const admin_tag = perms.is_superuser ? '/all' : ''
+        return axiosInstance(`/${resource}${admin_tag}?${stringify(query)}`).then(({ data }) => ({
         // return axiosInstance(`/${resource}`).then(({ data }) => ({
             data: data.results,
             total: data.total,
@@ -34,7 +36,7 @@ export default {
     getMany: (resource, params) => {
         const formated_ids = params.ids.map( id => `${id},` )
         return axiosInstance
-                .get(`/${resource}?id__in=${formated_ids}`)
+                .get(`/${resource}/many?ids=${formated_ids}`)
                 .then( ({ data, total }) => ({ data: data.results , total: total }) ) ;
     },
 

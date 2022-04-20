@@ -6,12 +6,7 @@ import {
    
     TabbedForm, FormTab, useGetList, TabbedFormTabs, useGetOne, NumberField, linkToRecord, SimpleShowLayout
 } from 'react-admin'
-import { Box, Card, CardContent, Chip } from '@material-ui/core';
-import TabComponent from '../../components/TabComponent'
-import UserChip from '../../components/UserChip';
-import StoreListManagers, { WarehouseListManagers } from '../../components/ListManagers';
-import GridList from '../../components/GridList';
-
+import { EditAction } from '../../components/Actions';
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
     const { data } = useGetOne(props.resource, props.id)
@@ -25,7 +20,7 @@ export default (props) => {
     
   
     return (
-        <Show  {...props} title={<Title {...props} />} >
+        <Show  {...props} title={<Title {...props} />} actions={<EditAction />} >
             <SimpleShowLayout>
                 <ReferenceField source='warehouse_id' reference='warehouses'>
                     <TextField source="name" />

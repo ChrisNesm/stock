@@ -45,6 +45,21 @@ def read_all(
     stores = crud.warehouse.get_all(db= db)
     return schemas.WarehouseRead(results= stores, total= len(stores))
 
+
+@router.get("/many", response_model= schemas.WarehouseRead)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i]
+    articles = crud.warehouse.get_many(db= db, ids= ids)
+    return schemas.WarehouseRead(results= articles, total= len(articles))
+
+
 @router.get("/owned", response_model= schemas.WarehouseRead)
 def read_owned(
     store_id: int,
@@ -74,7 +89,7 @@ def read_owned(
 @router.get("/", response_model= schemas.WarehouseRead )
 def read_managed(
     db: Session = Depends(deps.get_db),
-    current_manager: models.User = Depends(deps.get_current_active_store_manager),
+    current_manager: models.User = Depends(deps.get_current_active_seller_or_store_manager),
 ):
     """
     List all warehouses I manage.

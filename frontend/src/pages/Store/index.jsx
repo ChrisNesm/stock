@@ -13,7 +13,7 @@ import {
     Link
 } from 'react-admin'
 import ActionButton from '../../components/ActionButton'
-import { Card, CardContent, CardHeader, useMediaQuery } from '@material-ui/core';
+import { Box, Card, CardContent, CardHeader, useMediaQuery } from '@material-ui/core';
 import theme from '../../constants/theme';
 import { Modal, makeStyles, Chip, Button, Typography } from '@material-ui/core';
 import GridList from '../../components/GridList';
@@ -120,10 +120,15 @@ export const ShowStore = (props) => {
 
                             </ArrayField>
                         </>,
-                        <>
+
+                        <Box>
+                            <span>Nom de la boutique : </span>
                             <TextField source="name" />
+                            <br />
+                            <span>Adresse : </span>
                             <TextField source="address" />
-                        </>,
+                        </Box>,
+
                         <div>
                             
                             <ArrayField source="warehouses">
@@ -133,6 +138,7 @@ export const ShowStore = (props) => {
                             </ArrayField>
                             
                         </div>,
+                        
                         <>
                             
                             <ArrayField source="warehouses">

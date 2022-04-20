@@ -8,17 +8,17 @@ import {
     TextInput, DateInput, ReferenceInput, SelectInput, BooleanInput,
     useListContext, useTranslate, useMediaQuery, useRecordContext, useDataProvider, useResourceContext,
     sanitizeListRestProps, DatagridLoading, ListContextProvider, 
-    TabbedForm, FormTab, useGetList, TabbedFormTabs, NumberInput
+    TabbedForm, FormTab, useGetList, TabbedFormTabs, NumberInput, usePermissions
 } from 'react-admin'
 import ActionButton from '../../components/ActionButton'
 import GridList from '../../components/GridList';
 import { Chip, Box } from '@material-ui/core';
 import ShowArticle from './Show';
-
+import {ListActions} from '../../components/Actions'
 export const ListArticle = props => {
 
     return (
-        <List {...props}>       
+        <List {...props} actions={<ListActions />}>       
            <GridList
                 getTitle={rec => `${rec.name}`}
                 getSubtitle={rec => (
@@ -45,43 +45,42 @@ export const ListArticle = props => {
 };
 
 export const CreateArticle = (props) => (
-    <Create  {...props} title="OK yes">
+    <Create  {...props} title="Ajouter un article">
         <SimpleForm>
             <ReferenceInput source="warehouse_id" reference="warehouses" label="Entrepot">
-                <SelectInput source='name' label="Magasin" />
+                <SelectInput source='name' label="Magasin" required />
             </ReferenceInput>
-            <TextInput source="name" />
+            <TextInput source="name" required />
             <TextInput source="description" />
-            <NumberInput source="unit_price" />
-            <NumberInput source="quantity" />
-            <NumberInput source="pending_quantity" />
+            <NumberInput source="unit_price" required/>
+            <NumberInput source="quantity" defaultValue={0}  required/>
         </SimpleForm>
     </Create>
 );
 
-export const EditArticle = (props) => (
-    <Edit {...props}>
-        <SimpleForm>
-                <ReferenceField source="warehouse_id" reference="warehouses" label="Entrepot">
-                    <TextField source='name' label="Magasin" />
-                </ReferenceField>
-                <ReferenceField source="warehouse_id" reference="warehouses">
-                    <ReferenceField source="store_id" reference="stores" label="Boutique" >
-                        <TextField source='name' />
-                        </ReferenceField>
-                </ReferenceField>
+export const EditArticle = (props) => {
+    return (
+        <Edit {...props}>
+            <SimpleForm>
+                    <ReferenceField source="warehouse_id" reference="warehouses" label="Entrepot">
+                        <TextField source='name' label="Magasin" />
+                    </ReferenceField>
+                    <ReferenceField source="warehouse_id" reference="warehouses">
+                        <ReferenceField source="store_id" reference="stores" label="Boutique" >
+                            <TextField source='name' />
+                            </ReferenceField>
+                    </ReferenceField>
+    
+                    <TextInput source="name" />
+                    <TextInput source="description" />
+                    <NumberInput source="unit_price" />
+                    <NumberInput source="quantity" />
+                    <NumberInput source="pending_quantity" />
+            </SimpleForm>
+        </Edit>
+    );
 
-            <Box display={'flex'}>
-                <TextInput source="name" />
-                <TextInput source="description" />
-                <NumberInput source="unit_price" />
-                <NumberInput source="quantity" />
-                <NumberInput source="pending_quantity" />
-
-            </Box>
-        </SimpleForm>
-    </Edit>
-);
+} 
 
 
 

@@ -41,6 +41,30 @@ def create(
         )
     return crud.order.create(db, order_in = order_in, article= related_article, seller = seller)
 
+@router.get("/all", response_model= schemas.OrderRead)
+def read_all(
+    db: Session = Depends(deps.get_db),
+    seller: models.User = Depends(deps.get_current_active_superuser),
+):
+    """
+    List all orders. SU option
+    """
+    orders = crud.order.get_all(db= db)
+    return schemas.OrderRead(results= orders, total= len(orders))
+
+
+@router.get("/many", response_model= schemas.OrderRead)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i ]
+    articles = crud.order.get_many(db= db, ids= ids)
+    return schemas.OrderRead(results= articles, total= len(articles))
 
 @router.get("/", response_model= schemas.OrderRead)
 def read_managed(

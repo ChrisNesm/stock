@@ -5,27 +5,47 @@ import {
     CreateButton, EditButton, ExportButton, DeleteButton, ShowButton, Button,
     TextField, DateField, ReferenceField, SelectField, BooleanField, ReferenceManyField, ArrayField, SingleFieldList, ChipField,
     TextInput, DateInput, ReferenceInput, SelectInput, BooleanInput,
-    useListContext, useTranslate, useMediaQuery, useRecordContext, useDataProvider, useResourceContext,
+    useListContext, useTranslate, useRecordContext, useDataProvider, useResourceContext,
     sanitizeListRestProps, DatagridLoading, ListContextProvider, 
-    TabbedForm, FormTab, useGetList, TabbedFormTabs
+    TabbedForm, FormTab, useGetList, TabbedFormTabs, useGetOne, SimpleList
 } from 'react-admin'
 import ActionButton from '../../components/ActionButton'
-
+import { useMediaQuery } from '@material-ui/core';
 import ShowWarehouse from './Show';
-
+import theme from '../../constants/theme';
 export const ListWarehouse = props => {
-/*    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
-*/    return (
-        <List {...props}>       
-            <Datagrid>
-                <ReferenceField source="store_id" reference="stores" label="Boutique" >
-                    <TextField source="name" />
-                </ReferenceField>
-                <TextField source="name" />
-                <TextField source="address" />
-                <ActionButton actions="edit,show,delete" />
-                {/* <CreateRelatedNiveauBtn /> */}
-            </Datagrid>
+    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    const dataProv = useDataProvider()
+    return (
+        <List {...props}>   
+            {
+                isSmall ? (
+                    <SimpleList
+                        primaryText={record => record.name}
+                        secondaryText={record => `${record.address}`}
+                        tertiaryText={record => {
+                            return (
+                                <ReferenceField source='store_id' reference='stores'  >
+                                    <TextField source='name' />
+                                </ReferenceField>
+                            )
+                        }}
+                        linkType={record => record.canEdit ? "edit" : "show"}
+                        rowStyle={record => ({ backgroundColor: theme.palette.secondary.main, marginBottom: 10 })}
+                    />
+                ) : (
+
+                    <Datagrid rowClick={'show'}>
+                        <ReferenceField source="store_id" reference="stores" label="Boutique" >
+                            <TextField source="name" />
+                        </ReferenceField>
+                        <TextField source="name" />
+                        <TextField source="address" />
+                        <ActionButton actions="edit,show,delete" />
+                        {/* <CreateRelatedNiveauBtn /> */}
+                    </Datagrid>
+                )
+            }    
         </List>
     );
 };
