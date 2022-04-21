@@ -133,7 +133,7 @@ def validate_order(
             detail="Commande inexistant",
         )
     warehouse = crud.warehouse.get(db= db, id= crud.article.get(db= db, id= order.article_id).warehouse_id)
-    if not crud.warehouse.is_user_manager_of(warehouse):
+    if not crud.warehouse.is_user_manager_of(db= db, warehouse= warehouse, user= current_user):
         raise HTTPException(
             status_code=400,
             detail="Vous n'êtes pas habilité à valider cette commande",
@@ -182,7 +182,7 @@ def reject_order(
             detail="Commande inexistante",
         )
     warehouse = crud.warehouse.get(db= db, id= crud.article.get(db= db, id= order.article_id).warehouse_id)
-    if not (crud.warehouse.is_user_manager_of(warehouse) or order.orderer_id != current_user.id ):
+    if not (crud.warehouse.is_user_manager_of(db= db, warehouse= warehouse, user= current_user) or order.orderer_id != current_user.id ):
         raise HTTPException(
             status_code=400,
             detail="Vous n'êtes pas habilité à valider cette commande",

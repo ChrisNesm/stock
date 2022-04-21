@@ -13,8 +13,10 @@ import CustomChip from '../../components/CustomChip';
 import UserChip from '../../components/UserChip';
 import orderStatus from '../../constants/orderStatus';
 import ConfimOrder from '../../components/ConfirmOrder';
+import RejectOrder from '../../components/RejectOrder';
 import {AdminOnly, ManagerOnly} from '../../components/Restrictors'
 import { ESGToolbar } from '../../components/Actions';
+import resolveOrderStatusName from './resolveOrderStatusName';
 
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
@@ -41,7 +43,10 @@ export default (props) => {
                                 wrapperOnly 
                                 getText={(rec => (
                                     <>
-                                        { rec.status === orderStatus.PENDING && <Typography variant="body1" color='error' >En attente</Typography> }                
+                                        { rec.status === orderStatus.PENDING && <Typography variant="body1" color='error' >  {resolveOrderStatusName(rec.status)} </Typography> }                
+                                        { rec.status === orderStatus.DONE && <Typography variant="body1" color='sucess' > {resolveOrderStatusName(rec.status)} </Typography> }    
+                                        { rec.status === orderStatus.CANCELLED && <Typography variant="body1" color='error' >{resolveOrderStatusName(rec.status)}</Typography> } 
+                                        { rec.status === orderStatus.REJECTED && <Typography variant="body1" color='error' > {resolveOrderStatusName(rec.status)} </Typography> }                                           
                                     </>
                                 ) )} 
                                 linkStyle={{
@@ -69,13 +74,13 @@ export default (props) => {
                                 </Typography>
                             </ReferenceField>
                             <AdminOnly negate={true}>
-                                <Box width="100vw">
-                                    <ConfimOrder label="Confirmer la commande"/>
-                                    {/* <ConfimOrder label="Rejeter la commande" /> */}
-                                    <Button label="Rejeter la commande" variant='error'>
-                                        Rejeter la commande
-                                    </Button>
-                                </Box>
+                                {/* <ManagerOnly> */}
+                                    <Box width="100vw">
+                                        <ConfimOrder label="Confirmer la commande"/>
+                                        {/* <ConfimOrder label="Rejeter la commande" /> */}
+                                        <RejectOrder label="Rejeter la commande" />
+                                    </Box>
+                                {/* </ManagerOnly> */}
 
                             </AdminOnly>
                         </SimpleShowLayout>

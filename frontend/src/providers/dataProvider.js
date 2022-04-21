@@ -90,6 +90,7 @@ export default {
     },
 
     create: (resource, params) =>{
+        console.log(resource, params)
         return axiosInstance({ 
             method: "post", 
             url: `/${resource}`, 
@@ -128,6 +129,18 @@ export default {
             data: data,
         })),
     removeManager: ({id, user_id}) => axiosInstance(`/warehouses/${id}/remove-manager?user_id=${user_id}`)
+        .then(({ data }) => ({
+            data: data,
+        })),
+    validateOrder: ({id}) => axiosInstance(`/orderers/${id}/validate`)
+        .then(({ data }) => ({
+            data: data,
+        })),
+    rejectOrder: ({id}) => axiosInstance(`/orderers/${id}/reject`)
+        .then(({ data }) => ({
+            data: data,
+        })),
+    cancelOrder: ({id}) => axiosInstance(`/orderers/${id}/cancel`)
         .then(({ data }) => ({
             data: data,
         })),
