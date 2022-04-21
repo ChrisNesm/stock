@@ -32,6 +32,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     ) -> List[ModelType]:
         return db.query(self.model).offset(skip).limit(limit).all()
 
+    def get_many(
+        self, db: Session, ids: List[int]
+    ) -> List[ModelType]:
+        return  db.query(self.model).filter(self.model.id.in_(ids)).all()
+
     def get_all(
         self, db: Session
     ) -> List[ModelType]:

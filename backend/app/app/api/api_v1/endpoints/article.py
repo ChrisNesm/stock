@@ -1,6 +1,7 @@
 from typing import Any, List, Optional
+from app.utilsp.uploads import save_upload_file
 
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -13,6 +14,7 @@ router = APIRouter()
 @router.post("/", response_model=schemas.ArticleRetrieve)
 def create(
     *,
+    # img: Optional[UploadFile] = File(None),
     db: Session = Depends(deps.get_db),
     article_in: schemas.ArticleCreate,
     manager: models.User = Depends(deps.get_current_active_store_manager),
@@ -21,8 +23,35 @@ def create(
     Create new article.
     """
     # TODO: set user permissions
+    # print(img)
+    # save_upload_file(img)
     return crud.article.create(db, obj_in = article_in)
 
+@router.get("/all", response_model= schemas.ArticleRead)
+def read_all(
+    store_id: Optional[int] = None,
+    warehouse_id: Optional[int] = None,
+    db: Session = Depends(deps.get_db),
+    su: models.User = Depends(deps.get_current_active_superuser),
+):
+    """
+    List all articles. SU option
+    """
+    articles = crud.article.get_all(db= db)
+    return schemas.ArticleRead(results= articles, total= len(articles))
+
+@router.get("/many", response_model= schemas.ArticleRead)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i ]
+    articles = crud.article.get_many(db= db, ids= ids)
+    return schemas.ArticleRead(results= articles, total= len(articles))
 
 @router.get("/", response_model= schemas.ArticleRead)
 def read_mine(
@@ -97,6 +126,22 @@ def update(
             detail="Vous n'êtes pas habilité à modifier les informations dans magasin",
         )
     return crud.article.update(db, db_obj= article, obj_in= article_in)
+
+@router.post('/upload/{article_id}')
+def upload_file(
+    article_id: int,
+    file: Optional[UploadFile] = File(None),
+    db: Session=Depends(deps.get_db)
+    )->Any:
+
+    article = crud.article.get(db= db, id= int(article_id))
+    path = save_upload_file(file)
+    filename = str(path).split('/')[-1]
+    article.img =filename
+    db.add(article)
+    db.commit()
+    return True
+
 
 @router.delete("/{article_id}", response_model=schemas.ArticleRetrieve)
 def delete(

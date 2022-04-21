@@ -37,13 +37,33 @@ def create(
 @router.get("/all", response_model= schemas.WarehouseRead)
 def read_all(
     db: Session = Depends(deps.get_db),
+    filtered: List = Depends(deps.filter_warehouses),
     su: models.User = Depends(deps.get_current_active_superuser),
 ):
     """
     List all warehouses. SU option
     """
+    if filtered:
+        print(len(filtered))
+        return schemas.WarehouseRead(results= filtered, total= len(filtered))
+
     stores = crud.warehouse.get_all(db= db)
     return schemas.WarehouseRead(results= stores, total= len(stores))
+
+
+@router.get("/many", response_model= schemas.WarehouseRead)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i]
+    articles = crud.warehouse.get_many(db= db, ids= ids)
+    return schemas.WarehouseRead(results= articles, total= len(articles))
+
 
 @router.get("/owned", response_model= schemas.WarehouseRead)
 def read_owned(
@@ -74,7 +94,7 @@ def read_owned(
 @router.get("/", response_model= schemas.WarehouseRead )
 def read_managed(
     db: Session = Depends(deps.get_db),
-    current_manager: models.User = Depends(deps.get_current_active_store_manager),
+    current_manager: models.User = Depends(deps.get_current_active_seller_or_store_manager),
 ):
     """
     List all warehouses I manage.

@@ -1,6 +1,13 @@
 FROM node:13.12.0-alpine
+# Télécharger et installer l'image de NodeJS
 WORKDIR /app
+# Change directory / créer le dossier et aller dedans
 ENV PATH /app/node_modules/.bin:$PATH
+# Definition d'une variable d'environnement
 COPY package.json ./
+# Copier le json de la machine dans le conteneur . Le Json comprend les dépendances du front en réact
 COPY . ./
+# Copier tout ce qui se trouve au même niveau que le docker file dans le dossier courant app du conteneur
 RUN npm install
+# Installer dans le conteneur les dépendance du json
+# Même exécution pour tout les lancement de conteneur

@@ -1,25 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:600|Work+Sans:400,500,600,700&display=swap');
-
-body{
-  background: rgb(34,193,195);
-  background: linear-gradient(135deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%);
-  font-family: "work sans";
-  height: 100vh;
-}
-
-html{
-  font-size: 100%;
+.link-add-manager:hover {
+  cursor: pointer;
 }
 
 #loginform{
-  max-width: 500px;
-  min-width: 300px;
-  max-height: 700px;
-  width: 50%;
-  height: 60%;
-  margin: 100px auto;
+  position: 'static';
+  top: 0;
+  left: 0;
+  width: 10%;
+  height: 100%;
   background-color: #FFFFFF;
   border-radius: 25px;
+  overflow: -moz-hidden-unscrollable;
 }
 
 #headerTitle{
@@ -66,10 +58,11 @@ html{
 }
 
 .row label{
-  align-self: start;
+  /* align-self: start; */
+  margin: 0;
   padding-left: 4.5rem;
   padding-bottom: 0.5rem;
-  color: rgba(187,187,187,0.9);
+  color: rgba(52, 49, 49, 0.909);
 }
 
 .row button{
@@ -92,41 +85,4 @@ html{
 
 #button{
   padding-bottom: 1.5rem;
-}
-
-#facebookIcon{
-  background-image:      url("https://image.flaticon.com/icons/svg/145/145802.svg");
-  background-repeat: no-repeat;
-  width: 3rem;
-  height: 3rem;
-}
-
-#twitterIcon{
-  background-image: url("https://image.flaticon.com/icons/svg/145/145812.svg");
-  background-repeat: no-repeat;
-  width: 3rem;
-  height: 3rem;
-}
-
-#googleIcon{
-  background-image: url("https://image.flaticon.com/icons/svg/145/145804.svg");
-  background-repeat: no-repeat;
-  width: 3rem;
-  height: 3rem;
-}
-
-#iconGroup{
-  display: flex;
-  justify-content: center;
-  padding: 2rem 0;
-}
-
-#iconGroup a{
-  margin: 0 0.6rem;
-}
-
-#alternativeLogin {
-   text-align: center;
-   padding-top: 2rem;
-   margin-top: 1.5rem;
 }

@@ -11,6 +11,7 @@ import TabComponent from '../../components/TabComponent'
 import UserChip from '../../components/UserChip';
 import StoreListManagers, { WarehouseListManagers } from '../../components/ListManagers';
 import GridList from '../../components/GridList';
+import { ESGToolbar } from '../../components/Actions';
 
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
@@ -25,7 +26,7 @@ export default (props) => {
     
   
     return (
-        <Show  {...props} title={<Title {...props} />} >
+        <Show  {...props} title={<Title {...props} />}  actions={<ESGToolbar />} >
             <TabComponent
                 tabs={[
                     {label: 'Tableau de bord'},
@@ -39,7 +40,12 @@ export default (props) => {
                             <TextField source="name" />
                         </ReferenceField><br />
                         <TextField source="name" label="Nom du magasin" /><br />
-                        <TextField source="address" label="Lieu" />
+                        <TextField source="address" label="Lieu" /> <br />
+                        <ReferenceField source="store_id" reference="stores" label="Propprétaire" >
+                            <ReferenceField source="owner" reference="users" label="Boutique" >
+                                <UserChip  /> 
+                            </ReferenceField>
+                        </ReferenceField><br />
                     </Box>,
 
                     <>

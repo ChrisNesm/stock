@@ -14,12 +14,20 @@ export default {
             } 
         })
         
-         .then(({data, status, statusText}) => {
+         .then(async ({data, status, statusText}) => {
             if (status < 200 || status >= 300) {
                 throw new Error(statusText);
             }
             else {
                 localStorage.setItem('auth', `${data['token_type']} ${data['access_token']}`);
+                refresh()
+                await axiosInstance({
+                    url: '/users/me', 
+                    method: "get"
+                }).then(({data, status, statusText}) => {
+                    localStorage.setItem('permissions', JSON.stringify(data))
+                    localStorage.setItem('permissions_time', JSON.stringify((new Date).getTime()))
+                })
                 refresh()
 
             }
@@ -32,6 +40,9 @@ export default {
     // called when the user clicks on the logout button
     logout: () => {
         localStorage.removeItem('auth');
+        localStorage.removeItem('permissions');
+        localStorage.removeItem('permissions_time');
+        
         console.log("logout")
         return Promise.resolve();
     },
@@ -61,7 +72,22 @@ export default {
     },
     // called when the user navigates to a new location, to check for permissions / roles
     getPermissions: (props) => {
-        console.log("get permissions with", props)
-        return Promise.resolve()
+        let perms = localStorage.getItem('permissions')
+        const lastTime = JSON.parse(localStorage.getItem('permissions_time'))
+        const currentTime = (new Date).getTime()
+        if (perms && lastTime && ( lastTime + 100000 ) < currentTime ) return Promise.resolve(JSON.parse(perms))
+        else return axiosInstance({
+            url: '/users/me', 
+            method: "get"
+        }).then(({data, status, statusText}) => {
+            if (status < 200 || status >= 300) {
+                throw new Error(statusText);
+            }
+            else {
+                
+            }
+            return Promise.resolve(data)
+        })
+        // return Promise.resolve()
     },
 };

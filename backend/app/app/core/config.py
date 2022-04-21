@@ -82,7 +82,8 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
 
-    UPLOAD_FILES_DIRS = 'app/uploads'
+    UPLOAD_FILES_DIRS = '/app/static'
+    STATICFILES_ENDPOINT: str = '/static'
 
     class Config:
         case_sensitive = True

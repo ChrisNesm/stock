@@ -41,6 +41,20 @@ def read_all(
     stores = crud.store.get_all(db= db)
     return schemas.store.StoresRead(results= stores, total= len(stores))
 
+
+@router.get("/many", response_model= schemas.StoresRead)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i ]
+    articles = crud.store.get_many(db= db, ids= ids)
+    return schemas.StoresRead(results= articles, total= len(articles))
+
 @router.get("/", response_model= schemas.store.StoresRead )
 def read_mine(
     db: Session = Depends(deps.get_db),

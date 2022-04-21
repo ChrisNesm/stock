@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Optional, Any
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -82,3 +82,22 @@ def get_current_active_owner(
             status_code=400, detail="Acces refusé"
         )
     return current_user
+
+def filter_orders(
+    db: Session = Depends(get_db),
+    status: Optional[str] = None
+) -> Any:
+    return crud.order.filter(**locals())
+
+
+def filter_warehouses(
+    db: Session = Depends(get_db),
+   store_id: Optional[int] = None,
+) -> Any:
+    if store_id:
+        store = crud.store.get(db= db, id= store_id)
+        return crud.warehouse.list_related_to_store(db= db, store= store)
+    # if store_id : 
+    #     filters.filter(models.Warehouse.store_id == store_id)
+    
+    # return filters.all()

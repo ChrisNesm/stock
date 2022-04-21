@@ -41,6 +41,34 @@ def create(
         )
     return crud.order.create(db, order_in = order_in, article= related_article, seller = seller)
 
+@router.get("/all", response_model= schemas.OrderRead)
+def read_all(
+    db: Session = Depends(deps.get_db),
+    status: Optional[str] = None,
+    seller: models.User = Depends(deps.get_current_active_superuser),
+):
+    """
+    List all orders. SU option
+    """
+    if status :
+        orders = crud.order.filter(db= db, status= status)
+    else :
+        
+        orders = crud.order.get_all(db= db)
+    return schemas.OrderRead(results= orders, total= len(orders))
+
+@router.get("/many", response_model= schemas.OrderRead)
+def read_many(
+    ids: str,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+):
+    """
+    List many article based on ids
+    """
+    ids = [ int(i) for i in ids.split(',') if i ]
+    articles = crud.order.get_many(db= db, ids= ids)
+    return schemas.OrderRead(results= articles, total= len(articles))
 
 @router.get("/", response_model= schemas.OrderRead)
 def read_managed(
@@ -52,6 +80,7 @@ def read_managed(
     """
     orders = crud.order.list_initiated(db= db, seller= seller)
     return schemas.OrderRead(results= orders, total= len(orders))
+    # return schemas.OrderRead(results= filtereds, total= len(filtereds))
 
 @router.get("/hosted", response_model= schemas.OrderRead)
 def read_hosted(
@@ -109,7 +138,7 @@ def validate_order(
             detail="Commande inexistant",
         )
     warehouse = crud.warehouse.get(db= db, id= crud.article.get(db= db, id= order.article_id).warehouse_id)
-    if not crud.warehouse.is_user_manager_of(warehouse):
+    if not crud.warehouse.is_user_manager_of(db= db, warehouse= warehouse, user= current_user):
         raise HTTPException(
             status_code=400,
             detail="Vous n'êtes pas habilité à valider cette commande",
@@ -158,7 +187,7 @@ def reject_order(
             detail="Commande inexistante",
         )
     warehouse = crud.warehouse.get(db= db, id= crud.article.get(db= db, id= order.article_id).warehouse_id)
-    if not (crud.warehouse.is_user_manager_of(warehouse) or order.orderer_id != current_user.id ):
+    if not (crud.warehouse.is_user_manager_of(db= db, warehouse= warehouse, user= current_user) or order.orderer_id != current_user.id ):
         raise HTTPException(
             status_code=400,
             detail="Vous n'êtes pas habilité à valider cette commande",

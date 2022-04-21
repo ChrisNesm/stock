@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-    List, Edit, Show, Create, Datagrid, SimpleForm, TopToolbar, DatagridBody,
-    CreateButton, EditButton, ExportButton, DeleteButton, ShowButton, Button,
-    TextField, DateField, ReferenceField, SelectField, BooleanField, ReferenceManyField, ArrayField, SingleFieldList, ChipField,
+    List, Edit, Show, 
+    TextField, DateField, ReferenceField, useRefresh,
    
-    TabbedForm, FormTab, useGetList, TabbedFormTabs, useGetOne, NumberField, linkToRecord, SimpleShowLayout
+    TabbedForm, FormTab, useGetList, TabbedFormTabs, useGetOne, NumberField, linkToRecord, SimpleShowLayout, useShowContext
 } from 'react-admin'
-import { Box, Card, CardContent, Chip } from '@material-ui/core';
-import TabComponent from '../../components/TabComponent'
-import UserChip from '../../components/UserChip';
-import StoreListManagers, { WarehouseListManagers } from '../../components/ListManagers';
-import GridList from '../../components/GridList';
-
+import { EditAction, ESGToolbar } from '../../components/Actions';
+import { Box, Button } from '@material-ui/core';
+import { MakeOrderModal } from '../../components/MakeOrder';
+import {ManagerOnly, SellerOnly} from '../../components/Restrictors'
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
     const { data } = useGetOne(props.resource, props.id)
@@ -21,11 +18,11 @@ const Title = (props) => {
 }
 
 export default (props) => {
-    const [ state, setState ] = useState([])
-    
-  
+    const [ state, setState ] = useState(false)
+    const closer = ()=> setState(prev => !prev);
+    const refresh = useRefresh()
     return (
-        <Show  {...props} title={<Title {...props} />} >
+        <Show  {...props} title={<Title {...props} />} actions={<ESGToolbar />} >
             <SimpleShowLayout>
                 <ReferenceField source='warehouse_id' reference='warehouses'>
                     <TextField source="name" />
@@ -41,9 +38,30 @@ export default (props) => {
                     }}
                     
                 />
-                <NumberField source="quantity" />
-                <NumberField source="quantity" />
+                <NumberField label="Quantité accesible" source="pending_quantity" />
+                <ManagerOnly>
+                    <NumberField label="Quantité totale" source="quantity" />
+                </ManagerOnly>
+                <Box>
+                <MakeOrderModal
+                    open={state}
+                    closer={closer}
+                    callback={()=>{
+                        closer()
+                        refresh()
+                    }}
+                />
+                <SellerOnly>
+                    <Button
+                        
+                        onClick={closer}
+                        variant='contained'
+                    >
+                        Commander
+                    </Button>
+                </SellerOnly>
 
+                </Box>
             </SimpleShowLayout>
         </Show>
     )

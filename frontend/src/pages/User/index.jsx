@@ -12,6 +12,7 @@ import ActionButton from '../../components/ActionButton'
 import {Link} from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { ESGToolbar } from '../../components/Actions';
 
 
 // const CreateRelatedNiveauBtn = ({ record }) => (
@@ -29,7 +30,9 @@ import Typography from '@material-ui/core/Typography';
 
 export const ListUsers = props => {
 /*    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
-*/    return (
+*/    
+    console.log("User")
+    return (
         <List {...props}>       
             <Datagrid>
                 <TextField source="id" />
@@ -40,7 +43,7 @@ export const ListUsers = props => {
                 <BooleanField source="is_manager" />
                 <BooleanField source="is_active" />
                 <BooleanField source="is_superuser" />
-                <ActionButton actions="show,edit,delete" />
+                <ActionButton actions="show,delete" />
                 {/* <CreateRelatedNiveauBtn /> */}
             </Datagrid>
         </List>
@@ -48,7 +51,7 @@ export const ListUsers = props => {
 };
 
 export const CreateUser = (props) => (
-    <Create  {...props}>
+    <Create  {...props} actions={<ESGToolbar />}>
         <SimpleForm >
             <TextInput source="full_name" />
             <TextInput source="email" />
@@ -61,7 +64,7 @@ export const CreateUser = (props) => (
 );
 
 export const EditUser = (props) => (
-    <Edit {...props}>
+    <Edit {...props} actions={<ESGToolbar />}>
         <SimpleForm>
             <TextField source="id" />
             <TextInput source="full_name" />
@@ -76,7 +79,7 @@ export const EditUser = (props) => (
 );
 
 export const ShowUser = (props) => (
-    <Edit  {...props}>
+    <Edit  {...props} actions={<ESGToolbar />}>
         <SimpleForm>
         <TextField source="id" />
             <TextField source="full_name" />

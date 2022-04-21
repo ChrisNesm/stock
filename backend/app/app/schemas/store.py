@@ -22,8 +22,9 @@ class StoreInDBBase(StoreBase):
 
 # Properties to return API on read one
 class StoresRetrieve(StoreInDBBase):
+    id: int
     warehouses: List[WarehouseRetrieve] 
-    business_provider: List[UserRetrieve]
+
     pass
 # Properties to return API on retrieve multiple
 class StoresRead(BaseModel):

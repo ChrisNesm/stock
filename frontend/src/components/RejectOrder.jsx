@@ -10,10 +10,10 @@ const ConfimOrder = ({clickHandler, label, onClick, ...rest}) => {
     // useGetOne('warehouses', )
 
     onClick = onClick ? onClick : ()=>{
-        dataProvider.validateOrder({id: record.id})
+        dataProvider.rejectOrder({id: record.id})
             .then(({data})=>{
                 console.log("my data", data)
-                notify(`Commande validée`, 'success', {}, false, 5000)
+                notify(`La Commande a été rejectée !`, 'success', {}, false, 5000)
                 refresh()
                 rest.callback && rest.callback()
             })
@@ -25,7 +25,7 @@ const ConfimOrder = ({clickHandler, label, onClick, ...rest}) => {
         <Button className="link-add-manager" 
             onClick={onClick} 
             variant="contained" 
-            color="secondary" 
+            color="error" 
             {...rest} >
             {label} 
             

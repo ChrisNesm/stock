@@ -18,13 +18,38 @@ import theme from '../../constants/theme';
 import orderStatus from '../../constants/orderStatus';
 import CustomChip from '../../components/CustomChip';
 import ConfirmOrder from '../../components/ConfirmOrder';
+import { ESGToolbar } from '../../components/Actions';
+import resolveOrderStatusName from './resolveOrderStatusName'
 
+import { makeStyles } from '@material-ui/core';
 
+const useQuickFilterStyles = makeStyles(theme => ({
+    chip: {
+        marginBottom: theme.spacing(1),
+    },
+}));
+const QuickFilter = ({ label }) => {
+    const translate = useTranslate();
+    const classes = useQuickFilterStyles();
+    return <Chip className={classes.chip} label={translate(label)} />;
+};
+
+const postFilters =[
+    <SelectInput source="status" choices={[
+        {id: 'PENDING', name: resolveOrderStatusName('PENDING')},
+        {id: 'DONE', name: resolveOrderStatusName('DONE')},
+        {id: 'CANCELLED', name: resolveOrderStatusName('CANCELLED')},
+        {id: 'REJECTED', name: resolveOrderStatusName('REJECTED')},
+    ]} alwaysOn />
+]
+// const postFilters = Object.values(orderStatus).map(
+//     status => <QuickFilter source={status} label={resolveOrderStatusName(status)} defaultValue={status} />
+// )
 
 export const ListOrder = props => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
     return (
-        <List {...props}>       
+        <List {...props} filters={postFilters} >       
            {
                isSmall ? (
                 <SimpleList
@@ -87,16 +112,16 @@ export const ListOrder = props => {
                     linkType='show'
                 />
                ) : (
-                <Datagrid rowClick='show'>
+                <Datagrid rowClick='show'  >
                     <ReferenceField source="orderer_id" reference="users" label="Client" link={false}>
-                        <TextField source="full_name" />
+                        <TextField source="full_name"  />
                     </ReferenceField>
                     <ReferenceField source="article_id" reference="articles" label="Article" link={false} >
                         <TextField source="name" />
                     </ReferenceField>
                     
                     <TextField source="order_quantity"  label="Commandé" />
-                    <TextField source="status"  label="Etat de la commande" />
+                    <CustomChip getText={(rec)=> resolveOrderStatusName(rec.status)}  />
                 </Datagrid>
                )
            }
@@ -104,16 +129,18 @@ export const ListOrder = props => {
     );
 };
 
-export const CreateOrder = (props) => (
-    <Create  {...props}>
-        <SimpleForm>
-            <ReferenceInput source="article_id" reference="articles" label="Article" >
-                <SelectInput source="name" />
-            </ReferenceInput>
-            <TextInput source="order_quantity"  label="Quantité" />
-        </SimpleForm>
-    </Create>
-);
+export const CreateOrder = (props) => {
+    return (
+        <Create  {...props} actions={<ESGToolbar />}>
+            <SimpleForm>
+                <ReferenceInput source="article_id" reference="articles" label="Article" >
+                    <SelectInput source="name" />
+                </ReferenceInput>
+                <TextInput source="order_quantity"  label="Quantité" />
+            </SimpleForm>
+        </Create>
+    );
+}
 
 export default {
     list: ListOrder,

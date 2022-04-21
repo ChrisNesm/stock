@@ -4,8 +4,8 @@ from sqlalchemy.sql.sqltypes import  Enum
 
 
 from app.db.base_class import Base
-from .warehouse import *
 from .store import *
+from .warehouse import *
 
 class User(Base):
     full_name = Column(String, index=True)
@@ -20,6 +20,6 @@ class User(Base):
     is_seller = Column(Boolean(), default=False)
 
     owned_stores =relationship('Store')
-    partner_stores = relationship('Store', secondary= 'user__store__partnership', back_populates='business_provider')
+    partner_warehouses = relationship('Warehouse', secondary= user__warehouse__partnership, back_populates='business_providers')
     orders = relationship('Order')
     managed_warehouses =relationship('Warehouse', secondary= 'user__warehouse', back_populates='managers')

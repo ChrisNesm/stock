@@ -1,5 +1,6 @@
 export default {
     PENDING: 'PENDING',
     DONE: 'DONE',
-    CANCELLED: 'CANCELLED'
+    CANCELLED: 'CANCELLED',
+    REJECTED: 'REJECTED'
 }

@@ -16,12 +16,26 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         obj_in_data = jsonable_encoder(obj_in)
         obj_in_data['hashed_password'] = get_password_hash(obj_in_data['password'])
         del obj_in_data['password']
+        if obj_in_data['is_owner'] :
+            obj_in_data['is_manager'] = True
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
 
+    def signin(self, db: Session, *, obj_in: UserCreate) -> User:
+        obj_in_data = jsonable_encoder(obj_in)
+        obj_in_data['hashed_password'] = get_password_hash(obj_in_data['password'])
+        del obj_in_data['password']
+        obj_in_data['is_owner'] = True
+        obj_in_data['is_manager'] = True
+        obj_in_data['is_seller'] = True
+        db_obj = self.model(**obj_in_data)  # type: ignore
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
     def update(
         self, db: Session, *, db_obj: User, obj_in: Union[UserUpdate, Dict[str, Any]]
     ) -> User:

@@ -9,6 +9,7 @@ services:
     ports:
       - "8888:80"
     volumes:
+      # Disques dur virtuel partagé
       - ./backend/app:/app
     environment:
       - JUPYTER=jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.custom_display_url=http://127.0.0.1:8888
