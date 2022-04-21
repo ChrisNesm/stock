@@ -20,6 +20,7 @@ export default {
             }
             else {
                 localStorage.setItem('auth', `${data['token_type']} ${data['access_token']}`);
+                refresh()
                 await axiosInstance({
                     url: '/users/me', 
                     method: "get"
@@ -40,6 +41,8 @@ export default {
     logout: () => {
         localStorage.removeItem('auth');
         localStorage.removeItem('permissions');
+        localStorage.removeItem('permissions_time');
+        
         console.log("logout")
         return Promise.resolve();
     },
@@ -72,7 +75,7 @@ export default {
         let perms = localStorage.getItem('permissions')
         const lastTime = JSON.parse(localStorage.getItem('permissions_time'))
         const currentTime = (new Date).getTime()
-        if (perms && lastTime && ( lastTime + 500000 ) < currentTime ) return Promise.resolve(JSON.parse(perms))
+        if (perms && lastTime && ( lastTime + 100000 ) < currentTime ) return Promise.resolve(JSON.parse(perms))
         else return axiosInstance({
             url: '/users/me', 
             method: "get"

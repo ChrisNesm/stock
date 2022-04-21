@@ -95,3 +95,26 @@ def reset_password(
     db.add(user)
     db.commit()
     return {"msg": "Password updated successfully"}
+
+@router.post("/sign", response_model=schemas.User)
+def create_user_open(
+    user_in: schemas.UserCreate,
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    """
+    Create new user without the need to be logged in.
+    """
+    # if not settings.USERS_OPEN_REGISTRATION:
+    #     raise HTTPException(
+    #         status_code=403,
+    #         detail="Open user registration is forbidden on this server",
+    #     )
+    user = crud.user.get_by_email(db, email= user_in.email)
+    if user:
+        raise HTTPException(
+            status_code=400,
+            detail="The user with this username already exists in the system",
+        )
+    
+    user = crud.user.create(db, obj_in=user_in)
+    return user

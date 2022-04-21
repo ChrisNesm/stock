@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:600|Work+Sans:400,500,600,700&display=swap');
 
+#signin {
+  text-align: center;
+  margin-left: 30%;
+} 
 body{
   background: rgb(34,193,195);
   background: linear-gradient(135deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%);
@@ -39,6 +43,13 @@ html{
   
 }
 
+.row2{
+  display: flex;
+  align-items: center;
+  padding-top: 2rem;
+  max-width: 40%;
+  
+}
 .row input{
   width: 80%;
   box-sizing: border-box;
@@ -72,9 +83,29 @@ html{
   color: rgba(187,187,187,0.9);
 }
 
+.row span{
+  align-self: center;
+  padding-left: 4.5rem;
+  padding-bottom: 0.5rem;
+  color: rgba(187,187,187,0.9);
+}
 .row button{
   border-radius: 25px;
   width: 80%;
+  height: 40px;
+  font-size: 1.3rem;
+  color: white;
+  font-weight: 700;
+  background: rgb(34,193,195);
+  background: linear-gradient(90deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%);
+  border: 0px;
+  cursor: pointer;
+  transition: opacity 0.25s ease-out;
+}
+
+.row #button2{
+  border-radius: 25px;
+  width: 40%;
   height: 40px;
   font-size: 1.3rem;
   color: white;

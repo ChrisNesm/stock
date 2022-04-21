@@ -16,6 +16,8 @@ import ArticleCRUD from "./pages/Article";
 // require('dotenv').config();
 
 import { AdminOnly } from "./components/Restrictors";
+import customRoutes from './customRoutes'
+
 const guessers = {
     list: ListGuesser,
     edit: EditGuesser,
@@ -41,6 +43,8 @@ const Renderer = () => {
                         dataProvider={dataProvider} 
                         authProvider={authProvider}  
                         theme={theme}
+                        customRoutes={customRoutes}
+                        mutationMode='pessimistic'
                         >
                             <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
                             <Resource  options={{label: "Toutes les Boutiques"}}  name="stores" list={StoreCRUD.list} show={StoreCRUD.show}  />
@@ -55,6 +59,8 @@ const Renderer = () => {
                     dataProvider={dataProvider} 
                     authProvider={authProvider}  
                     theme={theme}
+                    customRoutes={customRoutes}
+                    mutationMode='pessimistic'
                     >
                         <Resource  options={{label: "Mes Boutiques"}}  name="stores" {...StoreCRUD}  />
                         <Resource  options={{label: "Mes entrepots"}}  name="warehouses" {...WarehouseCRUD}  />

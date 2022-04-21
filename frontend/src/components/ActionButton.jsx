@@ -11,13 +11,13 @@ import { AdminOnly } from './Restrictors'
    
        return (
            <>
-               { actions.find( action => action === 'show' )  && <ShowButton {...props} /> }
+               { actions.find( action => action === 'show' )  && <ShowButton {...props} label="Voir" /> }
                { actions.find( action => action === 'edit' )  && (
                    <AdminOnly negate={true}>
-                        <EditButton {...props} />
+                        <EditButton {...props} label="Modifier" />
                    </AdminOnly>
                ) }
-               { actions.find( action => action === 'delete' ) && <DeleteButton {...props} /> }
+               { actions.find( action => action === 'delete' ) && <DeleteButton {...props} label="Archiver" /> }
    
            </>
        )

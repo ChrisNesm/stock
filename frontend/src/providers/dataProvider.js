@@ -124,6 +124,20 @@ export default {
         //     params: JSON.stringify(params.data),
         // }).then(({ json }) => ({ data: json }));
     },
+
+    signIn: (params) =>{
+        return axiosInstance({ 
+            method: "post", 
+            url: `/auth/sign`, 
+            data: params, 
+            headers: { "Content-Type": "application/json" } 
+        })
+            .then(({ data, status, statusText }) => ({
+                    data: { ...params.data, id: data.id },
+                    status: status,
+                    statusText: statusText
+            }))
+    },
     setManager: ({id, user_id}) => axiosInstance(`/warehouses/${id}/add-manager?user_id=${user_id}`)
         .then(({ data }) => ({
             data: data,

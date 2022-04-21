@@ -18,7 +18,7 @@ export const EditAction = ({ basePath, data, resource }) => {
     }, [permissions])
     return (
         <TopToolbar>
-            { (!permissions.is_superuser) && <EditButton basePath={basePath} record={data} /> }
+            { (!permissions.is_superuser) && <EditButton basePath={basePath} record={data} label="Modifier" /> }
         </TopToolbar>
     );
 }
@@ -35,7 +35,7 @@ export const ListActions = () =>{
     return  (
         <TopToolbar>
             {
-               permissions.is_manager && <CreateButton/>
+               permissions.is_manager && <CreateButton label="Créer" />
             }
             <ExportButton/>
         </TopToolbar>
