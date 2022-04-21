@@ -40,7 +40,12 @@ export default (props) => {
                             <TextField source="name" />
                         </ReferenceField><br />
                         <TextField source="name" label="Nom du magasin" /><br />
-                        <TextField source="address" label="Lieu" />
+                        <TextField source="address" label="Lieu" /> <br />
+                        <ReferenceField source="store_id" reference="stores" label="Propprétaire" >
+                            <ReferenceField source="owner" reference="users" label="Boutique" >
+                                <UserChip  /> 
+                            </ReferenceField>
+                        </ReferenceField><br />
                     </Box>,
 
                     <>

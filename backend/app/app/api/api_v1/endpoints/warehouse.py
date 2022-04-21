@@ -37,11 +37,16 @@ def create(
 @router.get("/all", response_model= schemas.WarehouseRead)
 def read_all(
     db: Session = Depends(deps.get_db),
+    filtered: List = Depends(deps.filter_warehouses),
     su: models.User = Depends(deps.get_current_active_superuser),
 ):
     """
     List all warehouses. SU option
     """
+    if filtered:
+        print(len(filtered))
+        return schemas.WarehouseRead(results= filtered, total= len(filtered))
+
     stores = crud.warehouse.get_all(db= db)
     return schemas.WarehouseRead(results= stores, total= len(stores))
 

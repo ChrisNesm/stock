@@ -14,11 +14,19 @@ import { useMediaQuery } from '@material-ui/core';
 import ShowWarehouse from './Show';
 import theme from '../../constants/theme';
 import { ESGToolbar } from '../../components/Actions';
+
+
+const filters = [
+    <ReferenceInput source='store_id' reference='stores' alwaysOn >
+        <SelectInput optionName='name' />
+    </ReferenceInput>
+]
+
 export const ListWarehouse = props => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const dataProv = useDataProvider()
     return (
-        <List {...props}>   
+        <List {...props} filters={filters} >   
             {
                 isSmall ? (
                     <SimpleList

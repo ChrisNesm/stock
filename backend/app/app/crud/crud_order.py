@@ -83,5 +83,15 @@ class CRUDOrder(CRUDBase[models.Order, schemas.OrderCreate, schemas.OrderUpdate]
         db.commit()
         db.refresh(order)
         return order
+    
+    def filter(
+        self,
+        db: Session,
+        status: Optional[str]= None
+        ) -> Any:
+        if status :
+            res = db.query(self.model).filter(self.model.status == status).all()
+            return res
+
 
 order = CRUDOrder(models.Order)

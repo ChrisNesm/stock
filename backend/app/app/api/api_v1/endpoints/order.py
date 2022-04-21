@@ -44,14 +44,18 @@ def create(
 @router.get("/all", response_model= schemas.OrderRead)
 def read_all(
     db: Session = Depends(deps.get_db),
+    status: Optional[str] = None,
     seller: models.User = Depends(deps.get_current_active_superuser),
 ):
     """
     List all orders. SU option
     """
-    orders = crud.order.get_all(db= db)
+    if status :
+        orders = crud.order.filter(db= db, status= status)
+    else :
+        
+        orders = crud.order.get_all(db= db)
     return schemas.OrderRead(results= orders, total= len(orders))
-
 
 @router.get("/many", response_model= schemas.OrderRead)
 def read_many(
@@ -76,6 +80,7 @@ def read_managed(
     """
     orders = crud.order.list_initiated(db= db, seller= seller)
     return schemas.OrderRead(results= orders, total= len(orders))
+    # return schemas.OrderRead(results= filtereds, total= len(filtereds))
 
 @router.get("/hosted", response_model= schemas.OrderRead)
 def read_hosted(

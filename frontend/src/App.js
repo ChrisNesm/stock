@@ -36,16 +36,13 @@ const Renderer = () => {
             {
                 perms.is_superuser ? (
                     <Admin 
-                        title="Rooky stock"
+                        title="Rooky stock (admin)"
                         loginPage={LoginPage} 
                         dataProvider={dataProvider} 
                         authProvider={authProvider}  
                         theme={theme}
                         >
-                            <AdminOnly>
-                                <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
-                            </AdminOnly>
-                            <Resource name="users" />
+                            <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
                             <Resource  options={{label: "Toutes les Boutiques"}}  name="stores" list={StoreCRUD.list} show={StoreCRUD.show}  />
                             <Resource  options={{label: "Tous les entrepots"}}  name="warehouses" list={WarehouseCRUD.list} show={WarehouseCRUD.show}  />
                             <Resource  options={{label: "Tous les articles"}}  name="articles" list={ArticleCRUD.list} show={ArticleCRUD.show} />
