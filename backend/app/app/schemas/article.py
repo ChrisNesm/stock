@@ -12,6 +12,7 @@ class ArticleBase(BaseModel):
     quantity: Optional[int] = None
     pending_quantity: Optional[int] = 0
     warehouse_id: Optional[int] = None
+    img: Optional[str] = None
     
 # Properties to receive via API on creation
 class ArticleCreate(BaseModel):

@@ -10,6 +10,7 @@ class Article(Base):
     description = Column(Text, index=True)
     unit_price = Column(Integer)
     quantity = Column(Integer)
+    img = Column(Text)
 
     # pending_quantity <= quantity
     pending_quantity = Column(Integer)

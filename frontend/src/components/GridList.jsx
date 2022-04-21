@@ -16,7 +16,7 @@ import {
     Button,
 } from 'react-admin';
 import { Link } from 'react-router-dom';
-import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+import { staticfilesURL } from '../constants/apiURL';
 
 const useStyles = makeStyles(theme => ({
     gridList: {
@@ -73,7 +73,7 @@ const LoadedGridList = (props) => {
     const { width } = props;
     const { ids, data, basePath, resource } = useListContext();
     const classes = useStyles();
-    console.log(ids, basePath, resource)
+    console.log(data)
     if (!ids || !data) return null;
     return (
         <MuiGridList
@@ -90,7 +90,11 @@ const LoadedGridList = (props) => {
                     
                 >
                     {
-                        props.image ?  props.image : <div style={{
+                        (data && data[id].img) ?  <img 
+                            src={`${staticfilesURL}/${data[id].img}`} 
+                            style={{
+                                height: '100%',
+                            }} /> : <div style={{
                             height: '100%',
                             backgroundColor: 'gray',
                         }} /> 
