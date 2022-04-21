@@ -58,7 +58,7 @@ export default (props) => {
                                 <TextField source="name" />
                             </ReferenceField>
                             <NumberField
-                                label="Prix unitaire"
+                                label="Prix unitaire: "
                                 source="unit_price"
                                 color="inherit"
                                 options={{
@@ -67,7 +67,8 @@ export default (props) => {
                                 }}
                                 
                             />
-                            <TextField source="order_quantity"  label="Quantité" />
+                            <TextField source="order_quantity"  label="Quantité commandée: " />
+                            <CustomChip label="Montant total: " getText={(rec)=> rec.unit_price * rec.order_quantity} />
                             <ReferenceField source="orderer_id" reference="users" label="Client" >
                                 <Typography color='secondary' variant='caption' >
                                     <UserChip getText={rec => `Commandé par: ${rec.full_name}, ${rec.email}`} />
