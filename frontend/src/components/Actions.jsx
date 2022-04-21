@@ -6,12 +6,15 @@ import { TopToolbar, useGetPermissions, Button,
     ExportButton,
     useListContext
 } from 'react-admin';
+import GoBack from './GoBack';
 
 export const EditAction = ({ basePath, data, resource }) => {
     const [ permissions, setState ] = useState({})
     const getPermissions = useGetPermissions()
     useEffect(()=>{
-        getPermissions().then(setState)
+        if(permissions.email !== undefined ){
+            getPermissions().then(setState)
+        }
     }, [permissions])
     return (
         <TopToolbar>
@@ -25,7 +28,9 @@ export const ListActions = () =>{
     const [ permissions, setState ] = useState({})
     const getPermissions = useGetPermissions()
     useEffect(()=>{
-        getPermissions().then(setState)
+        if(permissions.email !== undefined ){
+            getPermissions().then(setState)
+        }
     }, [permissions])
     return  (
         <TopToolbar>
@@ -33,6 +38,15 @@ export const ListActions = () =>{
                permissions.is_manager && <CreateButton/>
             }
             <ExportButton/>
+        </TopToolbar>
+    );
+}
+
+
+export const ESGToolbar = () =>{
+    return  (
+        <TopToolbar>
+            <GoBack />
         </TopToolbar>
     );
 }

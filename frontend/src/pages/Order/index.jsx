@@ -18,6 +18,7 @@ import theme from '../../constants/theme';
 import orderStatus from '../../constants/orderStatus';
 import CustomChip from '../../components/CustomChip';
 import ConfirmOrder from '../../components/ConfirmOrder';
+import { ESGToolbar } from '../../components/Actions';
 
 
 
@@ -105,7 +106,7 @@ export const ListOrder = props => {
 };
 
 export const CreateOrder = (props) => (
-    <Create  {...props}>
+    <Create  {...props} actions={<ESGToolbar />}>
         <SimpleForm>
             <ReferenceInput source="article_id" reference="articles" label="Article" >
                 <SelectInput source="name" />

@@ -11,6 +11,7 @@ import TabComponent from '../../components/TabComponent'
 import UserChip from '../../components/UserChip';
 import StoreListManagers, { WarehouseListManagers } from '../../components/ListManagers';
 import GridList from '../../components/GridList';
+import { ESGToolbar } from '../../components/Actions';
 
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
@@ -25,7 +26,7 @@ export default (props) => {
     
   
     return (
-        <Show  {...props} title={<Title {...props} />} >
+        <Show  {...props} title={<Title {...props} />}  actions={<ESGToolbar />} >
             <TabComponent
                 tabs={[
                     {label: 'Tableau de bord'},

@@ -14,6 +14,7 @@ import UserChip from '../../components/UserChip';
 import orderStatus from '../../constants/orderStatus';
 import ConfimOrder from '../../components/ConfirmOrder';
 import {AdminOnly, ManagerOnly} from '../../components/Restrictors'
+import { ESGToolbar } from '../../components/Actions';
 
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
@@ -31,11 +32,11 @@ export default (props) => {
         <ShowController  {...props} title={<Title {...props} />} >
             {
                 controllerProps => (
-                    <ShowView {...props} {...controllerProps} >
+                    <ShowView {...props} {...controllerProps} actions={<ESGToolbar />} >
                     <RecordContextProvider value={controllerProps.record}>
 
                         {console.log(controllerProps.record)}
-                        <SimpleShowLayout>
+                        <SimpleShowLayout actions={<ESGToolbar />} >
                             <CustomChip 
                                 wrapperOnly 
                                 getText={(rec => (

@@ -6,7 +6,8 @@ import {
    
     TabbedForm, FormTab, useGetList, TabbedFormTabs, useGetOne, NumberField, linkToRecord, SimpleShowLayout
 } from 'react-admin'
-import { EditAction } from '../../components/Actions';
+import { EditAction, ESGToolbar } from '../../components/Actions';
+
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
     const { data } = useGetOne(props.resource, props.id)
@@ -20,7 +21,7 @@ export default (props) => {
     
   
     return (
-        <Show  {...props} title={<Title {...props} />} actions={<EditAction />} >
+        <Show  {...props} title={<Title {...props} />} actions={<ESGToolbar />} >
             <SimpleShowLayout>
                 <ReferenceField source='warehouse_id' reference='warehouses'>
                     <TextField source="name" />

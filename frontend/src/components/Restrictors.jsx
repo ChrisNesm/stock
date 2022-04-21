@@ -6,7 +6,9 @@ export const AdminOnly = ({children, negate}) =>{
     const [ permissions, setState ] = useState({})
     const getPermissions = useGetPermissions()
     useEffect(()=>{
-        getPermissions().then(setState)
+        if(permissions.email !== undefined ){
+            getPermissions().then(setState)
+        }
     }, [permissions])
     return  (
         <>
@@ -21,7 +23,9 @@ export const ManagerOnly = ({children, negate}) =>{
     const [ permissions, setState ] = useState({})
     const getPermissions = useGetPermissions()
     useEffect(()=>{
-        getPermissions().then(setState)
+        if(permissions.email !== undefined ){
+            getPermissions().then(setState)
+        }
     }, [permissions])
     return  (
         <>

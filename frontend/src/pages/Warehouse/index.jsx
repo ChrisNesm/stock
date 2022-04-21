@@ -13,6 +13,7 @@ import ActionButton from '../../components/ActionButton'
 import { useMediaQuery } from '@material-ui/core';
 import ShowWarehouse from './Show';
 import theme from '../../constants/theme';
+import { ESGToolbar } from '../../components/Actions';
 export const ListWarehouse = props => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const dataProv = useDataProvider()
@@ -51,7 +52,7 @@ export const ListWarehouse = props => {
 };
 
 export const CreateWarehouse = (props) => (
-    <Create  {...props}>
+    <Create  {...props} actions={<ESGToolbar />}>
         <SimpleForm >
             <TextInput source="name" />
             <TextInput source="address" />
@@ -63,7 +64,7 @@ export const CreateWarehouse = (props) => (
 );
 
 export const EditWarehouse = (props) => (
-    <Edit {...props}>
+    <Edit {...props} actions={<ESGToolbar />}>
         <SimpleForm>
         <TextInput source="name" />
         <TextInput source="address" />

@@ -14,7 +14,7 @@ import ActionButton from '../../components/ActionButton'
 import GridList from '../../components/GridList';
 import { Chip, Box } from '@material-ui/core';
 import ShowArticle from './Show';
-import {ListActions} from '../../components/Actions'
+import {ESGToolbar, ListActions} from '../../components/Actions'
 
 
 const ArticleSaveButton = props => {
@@ -101,7 +101,7 @@ export const CreateArticle = (props) => {
 
 export const EditArticle = (props) => {
     return (
-        <Edit {...props}>
+        <Edit {...props} actions={<ESGToolbar />}>
             <SimpleForm>
                     <ReferenceField source="warehouse_id" reference="warehouses" label="Entrepot">
                         <TextField source='name' label="Magasin" />

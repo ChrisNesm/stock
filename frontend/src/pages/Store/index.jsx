@@ -23,6 +23,7 @@ import UserChip from '../../components/UserChip/index';
 import ListManagers from '../../components/ListManagers'
 
 import AddBox from '@material-ui/icons/AddBox';
+import { ESGToolbar } from '../../components/Actions';
 export const ListStore = props => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
         return (
@@ -48,7 +49,7 @@ export const ListStore = props => {
 };
 
 export const CreateStore = (props) => (
-    <Create  {...props}>
+    <Create  {...props} actions={<ESGToolbar />}>
         <SimpleForm >
             <TextInput source="name" />
             <TextInput source="address" />
@@ -57,7 +58,7 @@ export const CreateStore = (props) => (
 );
 
 export const EditStore = (props) => (
-    <Edit {...props}>
+    <Edit {...props} actions={<ESGToolbar />}>
         <SimpleForm>
             <TextInput source="name" />
             <TextInput source="address" />
@@ -77,7 +78,7 @@ export const ShowStore = (props) => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
     return (
-        <Show  {...props} title={<Title {...props} />} l>
+        <Show  {...props} title={<Title {...props} />} actions={<ESGToolbar />}>
             <div style={{}}>
 
                 <TabComponent 
