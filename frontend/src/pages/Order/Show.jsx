@@ -58,7 +58,7 @@ export default (props) => {
                                 <TextField source="name" />
                             </ReferenceField>
                             <NumberField
-                                label="Prix unitaire: "
+                                label="Prix unitaire"
                                 source="unit_price"
                                 color="inherit"
                                 options={{
@@ -67,7 +67,7 @@ export default (props) => {
                                 }}
                                 
                             />
-                            <TextField source="order_quantity"  label="Quantité commandée: " />
+                            <TextField source="order_quantity"  label="Quantité" />
                             <CustomChip label="Montant total: " getText={(rec)=> rec.unit_price * rec.order_quantity} />
                             <ReferenceField source="orderer_id" reference="users" label="Client" >
                                 <Typography color='secondary' variant='caption' >
@@ -78,7 +78,6 @@ export default (props) => {
                                 {/* <ManagerOnly> */}
                                     <Box width="100vw">
                                         <ConfimOrder label="Confirmer la commande"/>
-                                        {/* <ConfimOrder label="Rejeter la commande" /> */}
                                         <RejectOrder label="Rejeter la commande" />
                                     </Box>
                                 {/* </ManagerOnly> */}

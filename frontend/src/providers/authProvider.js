@@ -25,7 +25,7 @@ export default {
                     method: "get"
                 }).then(({data, status, statusText}) => {
                     localStorage.setItem('permissions', JSON.stringify(data))
-
+                    localStorage.setItem('permissions_time', JSON.stringify((new Date).getTime()))
                 })
                 refresh()
 
@@ -70,7 +70,9 @@ export default {
     // called when the user navigates to a new location, to check for permissions / roles
     getPermissions: (props) => {
         let perms = localStorage.getItem('permissions')
-        if (perms) return Promise.resolve(JSON.parse(perms))
+        const lastTime = JSON.parse(localStorage.getItem('permissions_time'))
+        const currentTime = (new Date).getTime()
+        if (perms && lastTime && ( lastTime + 500000 ) < currentTime ) return Promise.resolve(JSON.parse(perms))
         else return axiosInstance({
             url: '/users/me', 
             method: "get"

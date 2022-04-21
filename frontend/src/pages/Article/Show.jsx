@@ -8,7 +8,7 @@ import {
 import { EditAction, ESGToolbar } from '../../components/Actions';
 import { Box, Button } from '@material-ui/core';
 import { MakeOrderModal } from '../../components/MakeOrder';
-import {ManagerOnly} from '../../components/Restrictors'
+import {ManagerOnly, SellerOnly} from '../../components/Restrictors'
 const Title = (props) => {
     const [ title, setTitle ] = useState("...")
     const { data } = useGetOne(props.resource, props.id)
@@ -51,13 +51,15 @@ export default (props) => {
                         refresh()
                     }}
                 />
-                <Button
-                    
-                    onClick={closer}
-                    variant='contained'
-                >
-                    Commander
-                </Button>
+                <SellerOnly>
+                    <Button
+                        
+                        onClick={closer}
+                        variant='contained'
+                    >
+                        Commander
+                    </Button>
+                </SellerOnly>
 
                 </Box>
             </SimpleShowLayout>

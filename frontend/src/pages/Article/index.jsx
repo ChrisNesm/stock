@@ -15,7 +15,7 @@ import GridList from '../../components/GridList';
 import { Chip, Box } from '@material-ui/core';
 import ShowArticle from './Show';
 import {ESGToolbar, ListActions} from '../../components/Actions'
-
+import { ManagerOnly } from '../../components/Restrictors'
 
 const ArticleSaveButton = props => {
     const notify = useNotify();
@@ -57,7 +57,11 @@ export const ListArticle = props => {
                 )}
                 image={null}
                 to={id => linkToRecord('/articles', id, 'show')}
-                getActionIcon={rec => (<Chip size='small' label={`Commandé: ${rec.pending_quantity}/${rec.quantity}`} />)}
+                getActionIcon={rec => (<>
+                    <ManagerOnly otherwise={<Chip size='small' label={`Stock: ${rec.pending_quantity}`} />} >
+                        <Chip size='small' label={`Commandé: ${rec.pending_quantity}/${rec.quantity}`} />
+                    </ManagerOnly>
+                </>)}
                 
             />
         </List> 
