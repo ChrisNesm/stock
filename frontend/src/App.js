@@ -14,6 +14,8 @@ import WarehouseCRUD from './pages/Warehouse'
 import OrderCRUD from './pages/Order'
 import ArticleCRUD from "./pages/Article";
 // require('dotenv').config();
+
+import { AdminOnly } from "./components/Restrictors";
 const guessers = {
     list: ListGuesser,
     edit: EditGuesser,
@@ -40,7 +42,10 @@ const Renderer = () => {
                         authProvider={authProvider}  
                         theme={theme}
                         >
-                            <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
+                            <AdminOnly>
+                                <Resource options={{label: "Users (admin)"}} name="users" {...UserCRUD}  />
+                            </AdminOnly>
+                            <Resource name="users" />
                             <Resource  options={{label: "Toutes les Boutiques"}}  name="stores" list={StoreCRUD.list} show={StoreCRUD.show}  />
                             <Resource  options={{label: "Tous les entrepots"}}  name="warehouses" list={WarehouseCRUD.list} show={WarehouseCRUD.show}  />
                             <Resource  options={{label: "Tous les articles"}}  name="articles" list={ArticleCRUD.list} show={ArticleCRUD.show} />

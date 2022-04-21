@@ -8,7 +8,7 @@ import {
     TextInput, DateInput, ReferenceInput, SelectInput, BooleanInput,
     useListContext, useTranslate, useMediaQuery, useRecordContext, useDataProvider, useResourceContext,
     sanitizeListRestProps, DatagridLoading, ListContextProvider, 
-    TabbedForm, FormTab, useGetList, TabbedFormTabs, NumberInput, usePermissions
+    TabbedForm, FormTab, useGetList, TabbedFormTabs, NumberInput, usePermissions, useQuery, useGetOne
 } from 'react-admin'
 import ActionButton from '../../components/ActionButton'
 import GridList from '../../components/GridList';
@@ -43,20 +43,32 @@ export const ListArticle = props => {
         </List> 
     );
 };
+const GeStoreName = ({id})=> {
+    const {data} = useGetOne('stores', id)
+    return <>{data && data.name}</>
+}
 
-export const CreateArticle = (props) => (
-    <Create  {...props} title="Ajouter un article">
-        <SimpleForm>
-            <ReferenceInput source="warehouse_id" reference="warehouses" label="Entrepot">
-                <SelectInput source='name' label="Magasin" required />
-            </ReferenceInput>
-            <TextInput source="name" required />
-            <TextInput source="description" />
-            <NumberInput source="unit_price" required/>
-            <NumberInput source="quantity" defaultValue={0}  required/>
-        </SimpleForm>
-    </Create>
-);
+export const CreateArticle = (props) => {
+    
+
+    return (
+        <Create  {...props} title="Ajouter un article">
+            <SimpleForm>
+                <ReferenceInput source="warehouse_id" reference="warehouses" label="Entrepot">
+                    <SelectInput source='name' label="Magasin" required  optionText={rec => (
+                        <>
+                            {rec.name} --- <GeStoreName id={rec.store_id} />
+                        </>
+                    ) }/>
+                </ReferenceInput>
+                <TextInput source="name" required />
+                <TextInput source="description" />
+                <NumberInput source="unit_price" required/>
+                <NumberInput source="quantity" defaultValue={0}  required/>
+            </SimpleForm>
+        </Create>
+    );
+}
 
 export const EditArticle = (props) => {
     return (
